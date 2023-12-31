@@ -28,12 +28,6 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Poppins',
       ),
       home: const AuthPage(),
-      routes: {
-        '/chat-screen': (context) => const ChatScreen(
-              user: {},
-              currentUserId: '',
-            ),
-      },
     );
   }
 }
