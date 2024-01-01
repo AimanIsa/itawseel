@@ -91,7 +91,6 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   @override
   Widget build(BuildContext context) {
-    String? currentorderID;
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
           .collection('orders')
@@ -107,9 +106,8 @@ class _OrderDetailsState extends State<OrderDetails> {
           return Scaffold(
             appBar: AppBar(),
             body: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+              child: Card(
+                child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
