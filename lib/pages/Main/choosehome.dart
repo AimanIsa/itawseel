@@ -34,7 +34,10 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                         color: primaryColor,
                         fontWeight: FontWeight.w800)),
                 Text("You can choose to be a runner or a customer.",
-                    style: TextStyle(fontSize: 15, color: primaryColor)),
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: primaryColor,
+                    )),
                 const SizedBox(height: 70),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

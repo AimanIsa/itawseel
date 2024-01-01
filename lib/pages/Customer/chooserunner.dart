@@ -82,6 +82,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                               // Handle errors gracefully, e.g., show an error message to the user
                             }
                           },
+                          orderid: widget.orderId,
                         );
                       } else {
                         return SizedBox();
@@ -104,11 +105,12 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
 
 _chooserunner(String riderId, num offeredPrice) async {}
 
-class RunnerCard extends StatelessWidget {
+class RunnerCard extends StatefulWidget {
   final String riderId;
   final String username;
   final num offeredChargeFees;
   final String profileImage;
+  final String orderid;
 
   // Add other runner details...
 
@@ -121,8 +123,14 @@ class RunnerCard extends StatelessWidget {
     required this.onChooseRunner,
     required this.username,
     required this.profileImage,
+    required this.orderid,
   }) : super(key: key);
 
+  @override
+  State<RunnerCard> createState() => _RunnerCardState();
+}
+
+class _RunnerCardState extends State<RunnerCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -133,22 +141,27 @@ class RunnerCard extends StatelessWidget {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadiusDirectional.circular(12))),
         onPressed: () {
-          onChooseRunner();
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const TrackingOrder()));
+          widget.onChooseRunner();
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TrackOrderPage(
+                        orderId: widget.orderid,
+                      )));
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(profileImage),
+                backgroundImage: NetworkImage(widget.profileImage),
               ),
               const SizedBox(width: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$username',
+                  Text('${widget.username}',
                       style: TextStyle(
                           fontSize: 20,
                           color: primaryColor,
@@ -168,7 +181,7 @@ class RunnerCard extends StatelessWidget {
                     children: [
                       const Text("RM "),
                       Text(
-                        '${offeredChargeFees.toStringAsFixed(0)}',
+                        '${widget.offeredChargeFees.toStringAsFixed(0)}',
                         style: TextStyle(
                             color: primaryColor,
                             fontSize: 25,

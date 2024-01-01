@@ -68,8 +68,8 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrackOrderPage(
-                      ChoosenRiderId: chosenRiderId,
+                    builder: (context) => TrackOrderRunnerPage(
+                      orderId: widget.orderId,
                     ),
                   ),
                 );

@@ -66,7 +66,7 @@ class _CartPageState extends State<CartPage> {
       final orderData = {
         'location': _selectedLocation,
         'orderId': orderId,
-        'totalPrice': getTotalPrice().toStringAsFixed(2),
+        'totalPrice': getTotalPrice(),
         'timestamp': FieldValue.serverTimestamp(),
         'fooditem': widget.cartItems
             .map((item) => {
@@ -168,7 +168,7 @@ class _CartPageState extends State<CartPage> {
                               color: primaryColor, fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
-                            'Qty: ${cartItem.quantity} | Price: RM ${cartItem.itemPrice.toStringAsFixed(2)} | Total: RM ${cartItem.getTotalPrice().toStringAsFixed(2)}'),
+                            'Qty: ${cartItem.quantity} | Price: RM ${cartItem.itemPrice} | Total: RM ${cartItem.getTotalPrice()}'),
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           color: primaryColor,
@@ -194,7 +194,7 @@ class _CartPageState extends State<CartPage> {
               children: [
                 SizedBox(width: 30),
                 Text(
-                  'Total: \RM ${getTotalPrice().toStringAsFixed(2)}',
+                  'Total: \RM ${getTotalPrice()}',
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
