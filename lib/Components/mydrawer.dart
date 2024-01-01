@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:itawseel/Components/navigation.dart';
+import 'package:itawseel/pages/Customer/chatlist.dart';
+import 'package:itawseel/pages/Customer/homepagec.dart';
 import 'package:itawseel/pages/Customer/profile.dart';
 import 'package:itawseel/themes/colors.dart';
 
@@ -28,12 +31,18 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
 
               //home side menu
-              const ListTile(
-                leading: Icon(Icons.home),
-                title: Text(
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text(
                   'Home',
                   style: TextStyle(fontSize: 17),
                 ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Navigation()));
+                },
               ),
 
               //  History side menu
@@ -55,7 +64,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ProfilePage()));
+                          builder: (context) => const ChatPage()));
                 },
                 hoverColor: const Color.fromARGB(255, 128, 10, 1),
               ),
