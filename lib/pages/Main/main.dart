@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:itawseel/pages/Login&SignUp/auth_page.dart';
+import 'package:itawseel/themes/colors.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -21,11 +22,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color.fromARGB(255, 128, 10, 1),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-        useMaterial3: true,
-        fontFamily: 'Poppins',
-      ),
+          primaryColor: const Color.fromARGB(255, 128, 10, 1),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+          useMaterial3: true,
+          fontFamily: 'Poppins',
+          appBarTheme: AppBarTheme(
+            backgroundColor: primaryColor,
+            iconTheme: IconThemeData(color: white),
+          )),
       home: const AuthPage(),
     );
   }

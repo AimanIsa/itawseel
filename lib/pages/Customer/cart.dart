@@ -96,17 +96,6 @@ class _CartPageState extends State<CartPage> {
           .doc(user.email) // Access the specific order document
           .update({'location': _selectedLocation});
 
-      // Display success message
-      // ignore: use_build_context_synchronously
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Order placed successfully!'),
-        ),
-      );
-
-      // ignore: use_build_context_synchronously
-
       // Clear cart (optional)
       widget.cartItems.clear();
       // Navigate to selectrider.dart
@@ -198,7 +187,7 @@ class _CartPageState extends State<CartPage> {
           color: primaryColor,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
+          padding: const EdgeInsets.symmetric(vertical: 20),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(

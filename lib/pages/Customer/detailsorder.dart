@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Components/mybutton.dart';
+import 'package:itawseel/Components/mytextfields.dart';
 import 'package:itawseel/pages/Customer/chooserunner.dart';
 import 'package:itawseel/themes/colors.dart';
 
@@ -113,6 +114,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 child: Column(
                   children: [
                     Card(
+                      elevation: 3,
                       color: white,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -138,7 +140,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       style: TextStyle(color: primaryColor),
                                     ),
                                     Text(
-                                      'Order ID: ${orderData['orderId']}',
+                                      'Your Location: ${orderData['location']}',
                                       style: TextStyle(color: primaryColor),
                                     ),
                                     const SizedBox(height: 20),
@@ -204,36 +206,35 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                             const SizedBox(height: 20),
                             SizedBox(height: 20),
-                            const Text(
-                              'Enter your location:',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 20),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 45),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: primaryColor,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      _selectedLocation,
-                                      style:
-                                          TextStyle(fontSize: 15, color: white),
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: MyTextfields(
+                                  hintText: 'Enter your location',
+                                  obscureText: false,
+                                  controller: _locationController),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: primaryColor,
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        _showLocationDialog();
-                                      },
-                                      icon: Icon(Icons.arrow_drop_down_rounded),
-                                      color: white,
-                                    )
-                                  ],
-                                ),
-                              ),
+                                    child: Text(
+                                      "update",
+                                      style: TextStyle(color: white),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedLocation =
+                                            _locationController.text;
+                                        _updateOrderLocation();
+                                      });
+                                    }),
+                              ],
                             ),
                             SizedBox(height: 20),
                             Visibility(
@@ -256,7 +257,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                               setState(() {
                                 _updateOrderLocation();
                               });
-                              if (_selectedLocation != 'Location') {
+                              if (_selectedLocation != 'Location' &&
+                                  _selectedLocation.isEmpty) {
                                 // Location is selected, proceed to the next page
                                 Navigator.push(
                                     context,

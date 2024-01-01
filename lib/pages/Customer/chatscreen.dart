@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:itawseel/themes/colors.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
@@ -39,11 +40,16 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
+        toolbarHeight: 90,
         title: FutureBuilder<String>(
           future: getRecipientUsername(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data!);
+              return Text(
+                snapshot.data!,
+                style: TextStyle(color: white),
+              );
             } else if (snapshot.hasError) {
               return const Text('Error loading username');
             }
@@ -51,54 +57,52 @@ class _ChatScreenState extends State<ChatScreen> {
           },
         ),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore
-            .collection('chats')
-            .doc(widget.chatId)
-            .collection('messages')
-            .orderBy('timestamp', descending: false)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                final message = snapshot.data!.docs[index];
-                final messageText = message['text'];
-                final messageSender = message['sender'];
+      body: Card(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _firestore
+              .collection('chats')
+              .doc(widget.chatId)
+              .collection('messages')
+              .orderBy('timestamp', descending: false)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final message = snapshot.data!.docs[index];
+                  final messageText = message['text'];
+                  final messageSender = message['sender'];
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: messageSender == currentUserId
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    children: [
-                      if (messageSender != currentUserId)
-                        const CircleAvatar(
-                          backgroundImage: AssetImage(
-                              'lib/images/Defaultprofile.jpg'), // Replace with a placeholder image
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: messageSender == currentUserId
+                          ? MainAxisAlignment.end
+                          : MainAxisAlignment.start,
+                      children: [
+                        if (messageSender != currentUserId)
+                          const SizedBox(width: 10),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: messageSender == currentUserId
+                                ? Colors.blue[100]
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(messageText),
                         ),
-                      const SizedBox(width: 10),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: messageSender == currentUserId
-                              ? Colors.blue[100]
-                              : Colors.grey[200],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(messageText),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+                      ],
+                    ),
+                  );
+                },
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
       bottomSheet: Container(
         padding: const EdgeInsets.all(8),
@@ -106,8 +110,9 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: TextField(
+                style: TextStyle(color: Colors.black87),
                 controller: _messageController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Type a message',
                 ),
               ),
