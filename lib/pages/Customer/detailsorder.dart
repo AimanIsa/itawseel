@@ -91,6 +91,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   @override
   Widget build(BuildContext context) {
+    String? currentorderID;
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
           .collection('orders')
@@ -231,8 +232,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const ChooseRunnerPage(
-                                                  orderId: '',
+                                                ChooseRunnerPage(
+                                                  orderId: widget.orderID,
                                                 )));
                                   } else {
                                     // Location is not selected, show the dialog

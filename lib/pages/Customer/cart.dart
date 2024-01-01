@@ -53,10 +53,10 @@ class _CartPageState extends State<CartPage> {
         'offerStatus': '',
         'offered': FieldValue.arrayUnion([
           {
-            'riderId': "",
-            'username': "",
-            'imageUrl': "",
-            'offeredChargeFees': "",
+            'riderId': 'rider',
+            'username': 'username',
+            'imageUrl': 'default',
+            'offeredChargeFees': 1,
           }
         ])
       };

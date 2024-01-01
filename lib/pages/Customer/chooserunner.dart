@@ -27,55 +27,67 @@ class ChooseRunnerPage extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            final orderData = snapshot.data!.data() as Map<String, dynamic>;
-            var riderOffered = orderData['offered'];
+            print(snapshot.hasData);
+            print(orderId);
 
-            if (riderOffered.isEmpty) {
-              return Center(child: Text('No offers available yet'));
-            }
+            final Map<String, dynamic>? orderData =
+                snapshot.data?.data() as Map<String, dynamic>;
+            print(orderData);
 
-            return ListView.builder(
-              itemCount: riderOffered.length,
-              itemBuilder: (context, index) {
-                final offer = riderOffered[index];
-                return RunnerCard(
-                  riderId: offer['riderId'],
-                  offeredChargeFees: offer['offeredChargeFees'],
-                  // ... other runner details from offer ...
-                  onChooseRunner: () async {
-                    // Handle runner selection logic here
-                    try {
-                      await FirebaseFirestore.instance
-                          .collection('orders')
-                          .doc(orderId)
-                          .update({
-                        'offered': {
-                          'offerStatus': 'riderSelected',
-                          'chosenRiderId': offer['riderId'],
-                          'chosenRiderOfferedFees': offer['offeredChargeFees'],
-                          // Add other chosen rider details if needed
-                          'totalPrice':
-                              FieldValue.increment(offer['offeredChargeFees']),
+            if (orderData != null) {
+              final offeredList = orderData['offered'];
+              print(offeredList);
+              return ListView.builder(
+                itemCount: offeredList.length,
+                itemBuilder: (context, index) {
+                  final offer = offeredList[index];
+                  // Access riderId and offered price safely
+                  final riderId = offer['riderId'] as String;
+                  final riderUsername = offer['username'] as String;
+                  final offeredPrice = offer['offeredChargeFees'] as num;
+                  // Assuming offered price is a number
+                  if (index > 0) {
+                    return RunnerCard(
+                      riderId: riderId,
+                      username: riderUsername,
+                      offeredChargeFees: offeredPrice,
+                      // ... other runner details from offer ...
+                      onChooseRunner: () async {
+                        // Handle runner selection logic here
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection('orders')
+                              .doc(orderId)
+                              .update({
+                            'offerStatus': 'riderSelected',
+                            'chosenRiderId': riderId,
+                            'chosenRiderOfferedPrice': offeredPrice,
+                            // Add other chosen rider details if needed
+                          });
+
+                          // Notify the chosen rider (implement your notification logic here)
+                          // ...
+
+                          // Navigate to a new screen or show a success message
+                          // ...
+                        } catch (error) {
+                          print('Error updating order: $error');
+                          // Handle errors gracefully, e.g., show an error message to the user
                         }
-                      });
-
-                      // Notify the chosen rider (implement your notification logic here)
-                      // ...
-
-                      // Navigate to a new screen or show a success message
-                      // ...
-                    } catch (error) {
-                      print('Error updating order: $error');
-                      // Handle errors gracefully, e.g., show an error message to the user
-                    }
-                  },
-                );
-              },
-            );
+                      },
+                    );
+                  } else {
+                    return Center(child: Text('Waiting for Runner..'));
+                  }
+                },
+              );
+            } else {
+              return Center(child: Text('No order data available'));
+            }
+          } else {
+            return Center(child: Text('Loading order data...'));
           }
-
-          return Center(child: Text('Loading...'));
-        },
+        }, // <-- Closing curly brace for builder
       ),
     );
   }
@@ -83,7 +95,8 @@ class ChooseRunnerPage extends StatelessWidget {
 
 class RunnerCard extends StatelessWidget {
   final String riderId;
-  final double offeredChargeFees;
+  final String username;
+  final num offeredChargeFees;
 
   // Add other runner details...
 
@@ -96,6 +109,7 @@ class RunnerCard extends StatelessWidget {
 
     // Add other required variables...
     required this.onChooseRunner,
+    required this.username,
   }) : super(key: key);
 
   @override
@@ -105,10 +119,8 @@ class RunnerCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // ... Display runner details based on available data...
-            // Examples:
-            Text('ID: $riderId'),
-            Text('Offered Fee: \${offeredChargeFees.toStringAsFixed(2)}'),
+            Text('Name: $username'),
+            Text('Offered Fee: $offeredChargeFees'),
 
             // Add other details like profile picture, rating, etc. ...
             ElevatedButton(
