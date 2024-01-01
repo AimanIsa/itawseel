@@ -213,17 +213,15 @@ class _OrderDetailsState extends State<OrderDetails> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
-                              child: MyTextfields(
-                                  hintText: 'Enter your location',
-                                  obscureText: false,
-                                  controller: _locationController),
-                            ),
-                            TextField(
-                              controller: _locationController,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                hintText: "Block D, Uthman",
-                                label: Text("Enter your location"),
+                              child: TextField(
+                                controller: _locationController,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12)),
+                                  hintText: "Block D, Uthman",
+                                  label: Text("Enter your location"),
+                                ),
                               ),
                             ),
                             SizedBox(height: 20),
