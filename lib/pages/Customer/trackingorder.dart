@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itawseel/themes/colors.dart';
 
 class TrackingOrder extends StatelessWidget {
   const TrackingOrder({super.key});
@@ -7,7 +8,10 @@ class TrackingOrder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tracking Order'),
+        title: Text(
+          'Tracking Order',
+          style: TextStyle(color: white),
+        ),
       ),
     );
   }

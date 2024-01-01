@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/pages/Runner/Ordercard.dart';
+import 'package:itawseel/pages/Runner/waitingcustomer.dart';
+import 'package:itawseel/themes/colors.dart';
 
 class HomepageR extends StatefulWidget {
   const HomepageR({Key? key}) : super(key: key);
@@ -81,7 +83,13 @@ class _HomepageRState extends State<HomepageR> {
             }
           ])
         });
-        setState(() {});
+        setState(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      WaitingForCustomerPage(orderId: orderId)));
+        });
         print('Offer submitted successfully!');
       } else {
         print(
@@ -102,7 +110,10 @@ class _HomepageRState extends State<HomepageR> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Available Orders'),
+        title: Text(
+          'Available Orders',
+          style: TextStyle(color: white),
+        ),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: _ordersStream,

@@ -106,7 +106,10 @@ class _OrderDetailsState extends State<OrderDetails> {
           final orderData = snapshot.data!.data() as Map<String, dynamic>;
           return Scaffold(
             appBar: AppBar(
-              title: Text('Order Details'),
+              title: Text(
+                'Order Details',
+                style: TextStyle(color: white),
+              ),
             ),
             body: SingleChildScrollView(
               child: Padding(
@@ -215,6 +218,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   obscureText: false,
                                   controller: _locationController),
                             ),
+                            TextField(
+                              controller: _locationController,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                hintText: "Block D, Uthman",
+                                label: Text("Enter your location"),
+                              ),
+                            ),
                             SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -257,7 +268,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                               setState(() {
                                 _updateOrderLocation();
                               });
-                              if (_selectedLocation != 'Location' &&
+                              if (_selectedLocation != 'Location' ||
                                   _selectedLocation.isEmpty) {
                                 // Location is selected, proceed to the next page
                                 Navigator.push(

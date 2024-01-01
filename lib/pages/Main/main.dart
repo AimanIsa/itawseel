@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:itawseel/pages/Login&SignUp/auth_page.dart';
+import 'package:itawseel/pages/Main/splash.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'firebase_options.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: primaryColor,
             iconTheme: IconThemeData(color: white),
           )),
-      home: const AuthPage(),
+      home: const Splash(),
     );
   }
 }

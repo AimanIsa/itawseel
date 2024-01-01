@@ -41,7 +41,7 @@ class _ChatPageState extends State<ChatPage> {
                     itemBuilder: (context, index) {
                       final user = snapshot.data!.docs[index];
                       final userId = user.id;
-                      final userDoc = snapshot.data!;
+
                       if (userId != currentUserId) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),

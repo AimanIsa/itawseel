@@ -17,7 +17,10 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choose Runner'),
+        title: Text(
+          'Choose Runner',
+          style: TextStyle(color: white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
