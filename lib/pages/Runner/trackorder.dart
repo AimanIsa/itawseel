@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itawseel/themes/colors.dart';
 
 class TrackOrderRunnerPage extends StatefulWidget {
   final String orderId;
@@ -28,7 +29,10 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Track Order'),
+        title: Text(
+          'Track Order',
+          style: TextStyle(color: white),
+        ),
       ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: _orderStream,
@@ -45,12 +49,44 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
 
           return Column(
             children: [
-              // Top section with order details (implement as needed)
-              // ...
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: orderData!['fooditem'].length,
+                itemBuilder: (context, index) {
+                  final item = orderData['fooditem'][index];
+                  return ListTile(
+                    title: Text(item['name']),
+                    trailing:
+                        Text('${item['price']}'), // Adjust currency formatting
+                  );
+                },
+              ),
+
+              // Chosen rider and total price
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Text('Chosen Rider: ${orderData!['chosenRiderId']}'),
+                    const SizedBox(height: 8.0),
+                    Text(' Charge Fees: ${orderData!['offeredChargeFees']}'),
+                    const SizedBox(height: 8.0),
+                    Text(
+                        'Total Price: ${(orderData!['totalPrice'] as num) + orderData!['offeredChargeFees']}'),
+                  ],
+                ),
+              ),
 
               // Middle section with timeline and buttons
               Expanded(
-                child: _buildTimeline(offerStatus),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: primaryColor),
+                      child: _buildTimeline(offerStatus)),
+                ),
               ),
 
               // Bottom section with buttons for updating status
@@ -89,12 +125,24 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
           shrinkWrap: true, // Use a dot as the timeline marker
           children: [
             // Rider selected
-            ListTile(
-              leading: const Icon(Icons.person_pin),
-              title: const Text('Rider Selected'),
-              trailing: offerStatus == 'riderSelected'
-                  ? const Icon(Icons.circle, color: Colors.green)
-                  : const SizedBox(), // Show a green circle if this step is active
+            Card(
+              color: primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ListTile(
+                  leading: Icon(
+                    Icons.person_pin,
+                    color: white,
+                  ),
+                  title: Text(
+                    'Rider Selected',
+                    style: TextStyle(color: white),
+                  ),
+                  trailing: offerStatus == 'riderSelected'
+                      ? const Icon(Icons.circle, color: Colors.green)
+                      : const SizedBox(), // Show a green circle if this step is active
+                ),
+              ),
             ),
 
             // Buying food
