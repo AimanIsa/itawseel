@@ -1,102 +1,111 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itawseel/pages/Customer/trackingorder.dart';
+import 'package:itawseel/themes/colors.dart';
 
-class ChooseRunnerPage extends StatelessWidget {
+class ChooseRunnerPage extends StatefulWidget {
   final String orderId;
 
   const ChooseRunnerPage({Key? key, required this.orderId}) : super(key: key);
 
   @override
+  State<ChooseRunnerPage> createState() => _ChooseRunnerPageState();
+}
+
+class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Choose Runner'),
+        title: const Text('Choose Runner'),
       ),
-      body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('orders')
-            .doc(orderId)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Something went wrong'));
-          }
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Card(
+          color: primaryColor,
+          child: StreamBuilder<DocumentSnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('orders')
+                .doc(widget.orderId)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(child: Text('Something went wrong'));
+              }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          if (snapshot.hasData) {
-            print(snapshot.hasData);
-            print(orderId);
+              if (snapshot.hasData) {
+                // ignore: unnecessary_nullable_for_final_variable_declarations
+                final Map<String, dynamic>? orderData =
+                    snapshot.data?.data() as Map<String, dynamic>;
 
-            final Map<String, dynamic>? orderData =
-                snapshot.data?.data() as Map<String, dynamic>;
-            print(orderData);
+                if (orderData != null) {
+                  final offeredList = orderData['offered'];
+                  return ListView.builder(
+                    itemCount: offeredList.length,
+                    itemBuilder: (context, index) {
+                      final offer = offeredList[index];
+                      // Access riderId and offered price safely
+                      final riderId = offer['riderId'] as String;
+                      final riderUsername = offer['username'] as String;
+                      final offeredPrice = offer['offeredChargeFees'] as num;
+                      final imageUrl = offer['imageUrl'] as String;
 
-            if (orderData != null) {
-              final offeredList = orderData['offered'];
-              print(offeredList);
-              return ListView.builder(
-                itemCount: offeredList.length,
-                itemBuilder: (context, index) {
-                  final offer = offeredList[index];
-                  // Access riderId and offered price safely
-                  final riderId = offer['riderId'] as String;
-                  final riderUsername = offer['username'] as String;
-                  final offeredPrice = offer['offeredChargeFees'] as num;
-                  // Assuming offered price is a number
-                  if (index > 0) {
-                    return RunnerCard(
-                      riderId: riderId,
-                      username: riderUsername,
-                      offeredChargeFees: offeredPrice,
-                      // ... other runner details from offer ...
-                      onChooseRunner: () async {
-                        // Handle runner selection logic here
-                        try {
-                          await FirebaseFirestore.instance
-                              .collection('orders')
-                              .doc(orderId)
-                              .update({
-                            'offerStatus': 'riderSelected',
-                            'chosenRiderId': riderId,
-                            'chosenRiderOfferedPrice': offeredPrice,
-                            // Add other chosen rider details if needed
-                          });
+                      // Assuming offered price is a number
+                      if (index != 0) {
+                        return RunnerCard(
+                          riderId: riderId,
+                          username: riderUsername,
+                          offeredChargeFees: offeredPrice,
+                          profileImage: imageUrl,
+                          onChooseRunner: () async {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection('orders')
+                                  .doc(widget.orderId)
+                                  .update({
+                                'offerStatus': 'riderSelected',
+                                'chosenRiderId': riderId,
+                                'offeredChargeFees': offeredPrice,
+                                // Add other chosen rider details if needed
+                              });
 
-                          // Notify the chosen rider (implement your notification logic here)
-                          // ...
-
-                          // Navigate to a new screen or show a success message
-                          // ...
-                        } catch (error) {
-                          print('Error updating order: $error');
-                          // Handle errors gracefully, e.g., show an error message to the user
-                        }
-                      },
-                    );
-                  } else {
-                    return Center(child: Text('Waiting for Runner..'));
-                  }
-                },
-              );
-            } else {
-              return Center(child: Text('No order data available'));
-            }
-          } else {
-            return Center(child: Text('Loading order data...'));
-          }
-        }, // <-- Closing curly brace for builder
+                              // Notify the chosen rider (implement your notification logic here)
+                              // ...
+                            } catch (error) {
+                              // Handle errors gracefully, e.g., show an error message to the user
+                            }
+                          },
+                        );
+                      } else {
+                        return SizedBox();
+                      }
+                    },
+                  );
+                } else {
+                  return const Center(child: Text('No order data available'));
+                }
+              } else {
+                return const Center(child: Text('Loading order data...'));
+              }
+            }, // <-- Closing curly brace for builder
+          ),
+        ),
       ),
     );
   }
 }
 
+_chooserunner(String riderId, num offeredPrice) async {}
+
 class RunnerCard extends StatelessWidget {
   final String riderId;
   final String username;
   final num offeredChargeFees;
+  final String profileImage;
 
   // Add other runner details...
 
@@ -106,30 +115,68 @@ class RunnerCard extends StatelessWidget {
     Key? key,
     required this.riderId,
     required this.offeredChargeFees,
-
-    // Add other required variables...
     required this.onChooseRunner,
     required this.username,
+    required this.profileImage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text('Name: $username'),
-            Text('Offered Fee: $offeredChargeFees'),
-
-            // Add other details like profile picture, rating, etc. ...
-            ElevatedButton(
-              onPressed: () {
-                onChooseRunner;
-              },
-              child: Text('Choose Runner'),
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusDirectional.circular(12))),
+        onPressed: () {
+          onChooseRunner();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const TrackingOrder()));
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(profileImage),
+              ),
+              const SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('$username',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold)),
+                  const Text('rating'),
+                ],
+              ),
+              const Spacer(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Fee:',
+                    style: TextStyle(color: primaryColor),
+                  ),
+                  Row(
+                    children: [
+                      const Text("RM "),
+                      Text(
+                        '${offeredChargeFees.toStringAsFixed(0)}',
+                        style: TextStyle(
+                            color: primaryColor,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

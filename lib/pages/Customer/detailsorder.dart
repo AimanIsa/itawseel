@@ -18,6 +18,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   String _selectedLocation = 'Location'; // Initialize with a default
   // Example locations
   final TextEditingController _locationController = TextEditingController();
+  bool existlocation = false;
 
   Future<void> _showLocationDialog() async {
     return showDialog<void>(
@@ -33,7 +34,6 @@ class _OrderDetailsState extends State<OrderDetails> {
           ),
         ),
         child: AlertDialog(
-          title: Text('Enter your Location'),
           content: SingleChildScrollView(
             child: ListBody(
               children: [
@@ -104,150 +104,174 @@ class _OrderDetailsState extends State<OrderDetails> {
         if (snapshot.hasData && snapshot.data!.data() != null) {
           final orderData = snapshot.data!.data() as Map<String, dynamic>;
           return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              title: Text('Order Details'),
+            ),
             body: SingleChildScrollView(
-              child: Card(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        Text(
-                          'Details ',
-                          style: TextStyle(
-                              fontSize: 38,
-                              fontWeight: FontWeight.bold,
-                              color: primaryColor),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Order ID: ${orderData['orderId']}',
-                          style: TextStyle(color: primaryColor),
-                        ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'Selected Location:',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 45),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: primaryColor,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Card(
+                      color: white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 10),
+                            Row(
                               children: [
-                                Text(
-                                  _selectedLocation,
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Colors.white),
+                                SizedBox(width: 30),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Details ',
+                                      style: TextStyle(
+                                          fontSize: 38,
+                                          fontWeight: FontWeight.bold,
+                                          color: primaryColor),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'Order ID: ${orderData['orderId']}',
+                                      style: TextStyle(color: primaryColor),
+                                    ),
+                                    Text(
+                                      'Order ID: ${orderData['orderId']}',
+                                      style: TextStyle(color: primaryColor),
+                                    ),
+                                    const SizedBox(height: 20),
+                                  ],
                                 ),
-                                IconButton(
-                                  onPressed: () {
-                                    _showLocationDialog();
-                                  },
-                                  icon: Icon(Icons.arrow_drop_down_rounded),
-                                  color: Colors.white,
-                                )
                               ],
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                        Column(
-                          children: [
+                            Column(
+                              children: [
+                                const SizedBox(height: 20),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 30),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Items:',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                      (orderData['fooditem'] as List<dynamic>?)
+                                              ?.length ??
+                                          0, // Ensure length is available
+                                  itemBuilder: (context, index) {
+                                    final foodItems =
+                                        orderData['fooditem'] as List<dynamic>?;
+                                    if (foodItems != null &&
+                                        index < foodItems.length) {
+                                      final item = foodItems[index];
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: ListTile(
+                                          title: Row(
+                                            children: [
+                                              Text(item['name']),
+                                              Spacer(),
+                                              Text(
+                                                  ' ${item['quantity']} x RM ${item['price'].toStringAsFixed(2)}')
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return const SizedBox(); // Or display an error message
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 20),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 30),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Items:',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)),
-                                ],
+                            Text(
+                              'Total : RM ${orderData['totalPrice']}',
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 20),
+                            SizedBox(height: 20),
+                            const Text(
+                              'Enter your location:',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 45),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      _selectedLocation,
+                                      style:
+                                          TextStyle(fontSize: 15, color: white),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        _showLocationDialog();
+                                      },
+                                      icon: Icon(Icons.arrow_drop_down_rounded),
+                                      color: white,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount:
-                                  (orderData['fooditem'] as List<dynamic>?)
-                                          ?.length ??
-                                      0, // Ensure length is available
-                              itemBuilder: (context, index) {
-                                final foodItems =
-                                    orderData['fooditem'] as List<dynamic>?;
-                                if (foodItems != null &&
-                                    index < foodItems.length) {
-                                  final item = foodItems[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: ListTile(
-                                      title: Row(
-                                        children: [
-                                          Text(item['name']),
-                                          Spacer(),
-                                          Text(
-                                              ' ${item['quantity']} x RM ${item['price'].toStringAsFixed(2)}')
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  return const SizedBox(); // Or display an error message
-                                }
-                              },
+                            SizedBox(height: 20),
+                            Visibility(
+                              visible: _selectedLocation == 'Location',
+                              child: Text(
+                                  "To continue, Please enter you location"),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 50),
-                        Text(
-                          'Total Price: ${orderData['totalPrice']}',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 50),
-                          child: Visibility(
-                            visible: _selectedLocation != 'Location',
-                            child: MyButton(
-                                text: "Continue",
-                                onTap: () {
-                                  setState(() {
-                                    _updateOrderLocation();
-                                  });
-                                  if (_selectedLocation != 'Location') {
-                                    // Location is selected, proceed to the next page
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ChooseRunnerPage(
-                                                  orderId: widget.orderID,
-                                                )));
-                                  } else {
-                                    // Location is not selected, show the dialog
-                                    _showLocationDialog();
-                                  }
-                                }),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'to continue, please select your Location',
-                          style: TextStyle(fontSize: 12, color: primaryColor),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 80),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 70),
+                      child: Visibility(
+                        visible: _selectedLocation != 'Location',
+                        child: MyButton(
+                            text: "Continue",
+                            onTap: () {
+                              setState(() {
+                                _updateOrderLocation();
+                              });
+                              if (_selectedLocation != 'Location') {
+                                // Location is selected, proceed to the next page
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChooseRunnerPage(
+                                              orderId: widget.orderID,
+                                            )));
+                              } else {
+                                // Location is not selected, show the dialog
+                                _showLocationDialog();
+                              }
+                            }),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

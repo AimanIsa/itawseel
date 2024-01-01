@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:itawseel/pages/Customer/detailsorder.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'Food.dart';
 
 class CartPage extends StatefulWidget {
@@ -16,7 +18,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   final List<CartItem> _cartItems = [];
-  final String _selectedLocation = 'Current Location';
+  final String _selectedLocation = 'Location';
 
   @override
   void initState() {
@@ -28,6 +30,29 @@ class _CartPageState extends State<CartPage> {
     setState(() {
       widget.cartItems.removeAt(index);
     });
+  }
+
+  Card buildButton({
+    required onTap,
+    required title,
+    required text,
+  }) {
+    return Card(
+      shape: const StadiumBorder(),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 20,
+      ),
+      clipBehavior: Clip.antiAlias,
+      elevation: 1,
+      child: ListTile(
+        onTap: onTap,
+        title: Text(title ?? ""),
+        subtitle: Text(text ?? ""),
+        trailing: const Icon(
+          Icons.keyboard_arrow_right_rounded,
+        ),
+      ),
+    );
   }
 
   void saveOrderToFirestore(List<CartItem> cartItem) async {
@@ -73,6 +98,7 @@ class _CartPageState extends State<CartPage> {
 
       // Display success message
       // ignore: use_build_context_synchronously
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Order placed successfully!'),
@@ -94,7 +120,15 @@ class _CartPageState extends State<CartPage> {
         ),
       );
 
-      setState(() {});
+      setState(() {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          text: 'Order placed successfully!',
+          // autoCloseDuration: const Duration(seconds: 2),
+          showConfirmBtn: true,
+        );
+      });
     } catch (error) {
       // Handle errors gracefully
       // ignore: avoid_print
@@ -164,7 +198,7 @@ class _CartPageState extends State<CartPage> {
           color: primaryColor,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15),
+          padding: const EdgeInsets.symmetric(vertical: 30),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
@@ -179,13 +213,14 @@ class _CartPageState extends State<CartPage> {
                 ),
                 const Spacer(),
                 Visibility(
+                    visible: getTotalPrice() != 0.00,
                     child: ElevatedButton(
-                  onPressed: () {
-                    saveOrderToFirestore(_cartItems);
-                  },
-                  child: const Text('Checkout',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                )),
+                      onPressed: () {
+                        saveOrderToFirestore(_cartItems);
+                      },
+                      child: const Text('Checkout',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    )),
                 const SizedBox(width: 30),
               ],
             ),
