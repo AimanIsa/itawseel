@@ -41,44 +41,44 @@ class _ChatPageState extends State<ChatPage> {
                     itemBuilder: (context, index) {
                       final user = snapshot.data!.docs[index];
                       final userId = user.id;
+                      final userDoc = snapshot.data!;
                       if (userId != currentUserId) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(13),
-                            border: Border.all(
-                              color: primaryColor,
-                            ),
-                          ),
-                          child: ListTile(
-                            title: Text(
-                              user['username'],
-                              style: TextStyle(
-                                color: primaryColor,
-                              ),
-                            ),
-                            onTap: () async {
-                              chatId = getChatId(currentUserId, userId);
-                              recipientId = userId;
-                              await _firestore
-                                  .collection('chats')
-                                  .doc(chatId)
-                                  .set({
-                                'users': [currentUserId, userId]
-                              });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatScreen(
-                                    chatId: chatId,
-                                    recipientId: recipientId,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Card(
+                            elevation: 1,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: ListTile(
+                                title: Text(
+                                  user['username'],
+                                  style: TextStyle(
+                                    color: primaryColor,
                                   ),
                                 ),
-                              );
-                            },
+                                onTap: () async {
+                                  chatId = getChatId(currentUserId, userId);
+                                  recipientId = userId;
+                                  await _firestore
+                                      .collection('chats')
+                                      .doc(chatId)
+                                      .set({
+                                    'users': [currentUserId, userId]
+                                  });
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                        chatId: chatId,
+                                        recipientId: recipientId,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         );
                       } else {

@@ -55,9 +55,9 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Text("I am a Runner",
+                        Text("Runner",
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 20,
                                 color: primaryColor,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -79,9 +79,9 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        const Text("I want order food",
+                        const Text("Customer",
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 20,
                                 color: Color.fromARGB(255, 128, 10, 1),
                                 fontWeight: FontWeight.bold)),
                       ],
