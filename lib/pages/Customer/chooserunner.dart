@@ -70,6 +70,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                                   .collection('orders')
                                   .doc(widget.orderId)
                                   .update({
+                                'Runnerusername': riderUsername,
                                 'offerStatus': 'riderSelected',
                                 'chosenRiderId': riderId,
                                 'offeredChargeFees': offeredPrice,
@@ -84,8 +85,25 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                           },
                           orderid: widget.orderId,
                         );
-                      } else {
-                        return SizedBox();
+                      } else if (index == 0) {
+                        return Visibility(
+                            visible: index != 0 || riderId.isNotEmpty,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'Waiting for runner...',
+                                    style: TextStyle(color: white),
+                                  ),
+                                  SizedBox(height: 20),
+                                  CircularProgressIndicator(
+                                    color: white,
+                                  ),
+                                ],
+                              ),
+                            ));
                       }
                     },
                   );
@@ -134,64 +152,67 @@ class _RunnerCardState extends State<RunnerCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusDirectional.circular(12))),
-        onPressed: () {
-          widget.onChooseRunner();
+      padding: EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusDirectional.circular(12))),
+          onPressed: () {
+            widget.onChooseRunner();
 
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TrackOrderPage(
-                        orderId: widget.orderid,
-                      )));
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(widget.profileImage),
-              ),
-              const SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('${widget.username}',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: primaryColor,
-                          fontWeight: FontWeight.bold)),
-                  const Text('rating'),
-                ],
-              ),
-              const Spacer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'Fee:',
-                    style: TextStyle(color: primaryColor),
-                  ),
-                  Row(
-                    children: [
-                      const Text("RM "),
-                      Text(
-                        '${widget.offeredChargeFees.toStringAsFixed(0)}',
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TrackOrderPage(
+                          orderId: widget.orderid,
+                        )));
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(widget.profileImage),
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${widget.username}',
                         style: TextStyle(
+                            fontSize: 20,
                             color: primaryColor,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ],
+                            fontWeight: FontWeight.bold)),
+                    const Text('rating'),
+                  ],
+                ),
+                const Spacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Fee:',
+                      style: TextStyle(color: primaryColor),
+                    ),
+                    Row(
+                      children: [
+                        const Text("RM "),
+                        Text(
+                          '${widget.offeredChargeFees.toStringAsFixed(0)}',
+                          style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

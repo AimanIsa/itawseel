@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:itawseel/pages/Runner/trackorder.dart';
@@ -51,17 +50,17 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
             final offerStatus = orderData?['offerStatus'] as String;
 
             if (offerStatus == 'pending') {
+              // ignore: prefer_const_constructors
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  const Text('Waiting for customer to choose a runner...'),
-                  const SizedBox(height: 20),
-                  const CircularProgressIndicator(),
+                  Text('Waiting for customer to choose a runner...'),
+                  SizedBox(height: 20),
+                  CircularProgressIndicator(),
                 ],
               );
             } else if (offerStatus == 'riderSelected') {
-              final chosenRiderId = orderData!['chosenRiderId'] as String;
-
               // Check if this user is the chosen rider
 
               Future.delayed(Duration.zero, () {

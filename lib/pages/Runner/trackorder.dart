@@ -47,70 +47,168 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
 
           final orderData = snapshot.data!.data();
 
-          return Column(
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: orderData!['fooditem'].length,
-                itemBuilder: (context, index) {
-                  final item = orderData['fooditem'][index];
-                  return ListTile(
-                    title: Text(item['name']),
-                    trailing:
-                        Text('${item['price']}'), // Adjust currency formatting
-                  );
-                },
-              ),
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 10),
+                // Chosen rider and total price
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Rider: ${orderData!['Runnerusername']}',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            ' Charge Fees: ${orderData['offeredChargeFees']}',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            ' Location: ${orderData['location']}',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            'Total Price: ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
 
-              // Chosen rider and total price
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10),
+                      const Row(
+                        children: [
+                          SizedBox(width: 10),
+                          Text(
+                            "Food Items",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: primaryColor),
+                        child: Column(
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: orderData['fooditem'].length,
+                              itemBuilder: (context, index) {
+                                final item = orderData['fooditem'][index];
+                                final count = 0 + 1;
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Card(
+                                    color: primaryColor,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ListTile(
+                                        leading: Text(
+                                          '$count',
+                                          style: TextStyle(
+                                              color: white, fontSize: 15),
+                                        ),
+                                        title: Text(
+                                          item['name'],
+                                          style: TextStyle(
+                                              color: white, fontSize: 15),
+                                        ),
+                                        trailing: Text(
+                                          'RM ${item['price']}',
+                                          style: TextStyle(
+                                              color: white, fontSize: 15),
+                                        ), // Adjust currency formatting
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Middle section with timeline and buttons
+                Column(
                   children: [
-                    Text('Chosen Rider: ${orderData!['chosenRiderId']}'),
-                    const SizedBox(height: 8.0),
-                    Text(' Charge Fees: ${orderData!['offeredChargeFees']}'),
-                    const SizedBox(height: 8.0),
-                    Text(
-                        'Total Price: ${(orderData!['totalPrice'] as num) + orderData!['offeredChargeFees']}'),
+                    SizedBox(height: 10),
+                    const Row(
+                      children: [
+                        SizedBox(width: 20),
+                        Text(
+                          "Tracking Progress",
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: primaryColor),
+                          child: _buildTimeline(offerStatus)),
+                    ),
                   ],
                 ),
-              ),
-
-              // Middle section with timeline and buttons
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: primaryColor),
-                      child: _buildTimeline(offerStatus)),
-                ),
-              ),
-
-              // Bottom section with buttons for updating status
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+                SizedBox(height: 10),
+                // Bottom section with buttons for updating status
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    SizedBox(width: 10),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor),
                       onPressed: () => _updateOfferStatus('buyingFood'),
-                      child: const Text('Mark as Buying Food'),
+                      child: Icon(Icons.fastfood_rounded, color: white),
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor),
                       onPressed: () => _updateOfferStatus('onTheWay'),
-                      child: const Text('Mark as On the Way'),
+                      child: Icon(Icons.delivery_dining_rounded, color: white),
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor),
                       onPressed: () => _updateOfferStatus('completed'),
-                      child: const Text('Mark as Completed'),
+                      child: Icon(Icons.check_circle_outline_rounded,
+                          color: white),
                     ),
+                    SizedBox(width: 10),
                   ],
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 100,
+                )
+              ],
+            ),
           );
         },
       ),
@@ -125,56 +223,117 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
           shrinkWrap: true, // Use a dot as the timeline marker
           children: [
             // Rider selected
-            Card(
-              color: primaryColor,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.person_pin,
-                    color: white,
-                  ),
-                  title: Text(
-                    'Rider Selected',
-                    style: TextStyle(color: white),
-                  ),
-                  trailing: offerStatus == 'riderSelected'
-                      ? const Icon(Icons.circle, color: Colors.green)
-                      : const SizedBox(), // Show a green circle if this step is active
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                color: primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: offerStatus == 'riderselected'
+                      ? ListTile(
+                          leading: Icon(Icons.person_pin, color: white),
+                          title: Text('Rider Selected',
+                              style: TextStyle(color: white)),
+                          trailing:
+                              const Icon(Icons.circle, color: Colors.green))
+                      : const ListTile(
+                          leading: Icon(
+                            Icons.person_pin,
+                            color: Colors.white54,
+                          ),
+                          title: Text('Rider Selected',
+                              style: TextStyle(color: Colors.white54)),
+                          trailing: const SizedBox(),
+                        ),
                 ),
               ),
             ),
 
             // Buying food
-            ListTile(
-              leading: const Icon(Icons.fastfood),
-              title: const Text('Buying Food'),
-              trailing: offerStatus == 'buyingFood'
-                  ? const Icon(Icons.circle, color: Colors.green)
-                  : const SizedBox(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                color: primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: offerStatus == 'buyingFood'
+                      ? ListTile(
+                          leading: Icon(Icons.fastfood, color: white),
+                          title: Text('Buying Food',
+                              style: TextStyle(color: white)),
+                          trailing:
+                              const Icon(Icons.circle, color: Colors.green))
+                      : const ListTile(
+                          leading: Icon(
+                            Icons.fastfood,
+                            color: Colors.white54,
+                          ),
+                          title: Text('Buying Food',
+                              style: TextStyle(color: Colors.white54)),
+                          trailing: const SizedBox(),
+                        ),
+                ),
+              ),
             ),
 
             // On the way
-            ListTile(
-              leading: const Icon(Icons.delivery_dining),
-              title: const Text('On the Way'),
-              trailing: offerStatus == 'onTheWay'
-                  ? const Icon(Icons.circle, color: Colors.green)
-                  : const SizedBox(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                color: primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: offerStatus == 'onTheWay'
+                      ? ListTile(
+                          leading: Icon(Icons.delivery_dining, color: white),
+                          title: Text('On The Way',
+                              style: TextStyle(color: white)),
+                          trailing:
+                              const Icon(Icons.circle, color: Colors.green))
+                      : const ListTile(
+                          leading: Icon(
+                            Icons.delivery_dining_outlined,
+                            color: Colors.white54,
+                          ),
+                          title: Text('On The Way',
+                              style: TextStyle(color: Colors.white54)),
+                          trailing: const SizedBox(),
+                        ),
+                ),
+              ),
             ),
 
             // Completed
-            ListTile(
-              leading: const Icon(Icons.check),
-              title: const Text('Completed'),
-              trailing: offerStatus == 'completed'
-                  ? const Icon(Icons.circle, color: Colors.green)
-                  : const SizedBox(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                color: primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: offerStatus == 'completed'
+                      ? ListTile(
+                          leading: Icon(Icons.check, color: white),
+                          title:
+                              Text('Completed', style: TextStyle(color: white)),
+                          trailing:
+                              const Icon(Icons.circle, color: Colors.green))
+                      : const ListTile(
+                          leading: Icon(
+                            Icons.check,
+                            color: Colors.white54,
+                          ),
+                          title: Text('Completed',
+                              style: TextStyle(color: Colors.white54)),
+                          trailing: const SizedBox(),
+                        ),
+                ),
+              ),
             ),
           ],
         ),
       ],
     );
+    ;
   }
 
   void _updateOfferStatus(String newStatus) async {

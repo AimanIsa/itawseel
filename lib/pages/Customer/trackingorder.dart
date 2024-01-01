@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:itawseel/themes/colors.dart';
+
 class TrackOrderPage extends StatefulWidget {
   final String orderId;
 
@@ -26,7 +28,10 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Track Order'),
+        title: Text(
+          'Track Order',
+          style: TextStyle(color: white),
+        ),
       ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: _orderStream,
@@ -63,21 +68,18 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     ),
 
                     // Chosen rider and total price
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Text('Chosen Rider: ${orderData['chosenRiderId']}'),
-                          const SizedBox(height: 8.0),
-                          Text(
-                              'Total Price: ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}'),
-                        ],
-                      ),
+                    Column(
+                      children: [
+                        Text('Chosen Rider: ${orderData['chosenRiderId']}'),
+                        const SizedBox(height: 8.0),
+                        Text(
+                            'Total Price: ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}'),
+                      ],
                     ),
                   ],
                 ),
               ),
-
+              Text("Track"),
               // Middle section with timeline
               Expanded(
                 child: _buildTimeline(offerStatus),
@@ -107,39 +109,111 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
           shrinkWrap: true, // Use a dot as the timeline marker
           children: [
             // Rider selected
-            ListTile(
-              leading: const Icon(Icons.person_pin),
-              title: const Text('Rider Selected'),
-              trailing: offerStatus == 'riderSelected'
-                  ? const Icon(Icons.circle, color: Colors.green)
-                  : const SizedBox(), // Show a green circle if this step is active
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                color: primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: offerStatus == 'riderselected'
+                      ? ListTile(
+                          leading: Icon(Icons.person_pin, color: white),
+                          title: Text('Rider Selected',
+                              style: TextStyle(color: white)),
+                          trailing:
+                              const Icon(Icons.circle, color: Colors.green))
+                      : const ListTile(
+                          leading: Icon(
+                            Icons.person_pin,
+                            color: Colors.white54,
+                          ),
+                          title: Text('Rider Selected',
+                              style: TextStyle(color: Colors.white54)),
+                          trailing: const SizedBox(),
+                        ),
+                ),
+              ),
             ),
 
             // Buying food
-            ListTile(
-              leading: const Icon(Icons.fastfood),
-              title: const Text('Buying Food'),
-              trailing: offerStatus == 'buyingFood'
-                  ? const Icon(Icons.circle, color: Colors.green)
-                  : const SizedBox(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                color: primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: offerStatus == 'buyingFood'
+                      ? ListTile(
+                          leading: Icon(Icons.fastfood, color: white),
+                          title: Text('Buying Food',
+                              style: TextStyle(color: white)),
+                          trailing:
+                              const Icon(Icons.circle, color: Colors.green))
+                      : const ListTile(
+                          leading: Icon(
+                            Icons.fastfood,
+                            color: Colors.white54,
+                          ),
+                          title: Text('Buying Food',
+                              style: TextStyle(color: Colors.white54)),
+                          trailing: const SizedBox(),
+                        ),
+                ),
+              ),
             ),
 
             // On the way
-            ListTile(
-              leading: const Icon(Icons.delivery_dining),
-              title: const Text('On the Way'),
-              trailing: offerStatus == 'onTheWay'
-                  ? const Icon(Icons.circle, color: Colors.green)
-                  : const SizedBox(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                color: primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: offerStatus == 'onTheWay'
+                      ? ListTile(
+                          leading: Icon(Icons.delivery_dining, color: white),
+                          title: Text('On The Way',
+                              style: TextStyle(color: white)),
+                          trailing:
+                              const Icon(Icons.circle, color: Colors.green))
+                      : const ListTile(
+                          leading: Icon(
+                            Icons.delivery_dining_outlined,
+                            color: Colors.white54,
+                          ),
+                          title: Text('On The Way',
+                              style: TextStyle(color: Colors.white54)),
+                          trailing: const SizedBox(),
+                        ),
+                ),
+              ),
             ),
 
             // Completed
-            ListTile(
-              leading: const Icon(Icons.check),
-              title: const Text('Completed'),
-              trailing: offerStatus == 'completed'
-                  ? const Icon(Icons.circle, color: Colors.green)
-                  : const SizedBox(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                color: primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: offerStatus == 'completed'
+                      ? ListTile(
+                          leading: Icon(Icons.check, color: white),
+                          title:
+                              Text('Completed', style: TextStyle(color: white)),
+                          trailing:
+                              const Icon(Icons.circle, color: Colors.green))
+                      : const ListTile(
+                          leading: Icon(
+                            Icons.check,
+                            color: Colors.white54,
+                          ),
+                          title: Text('Completed',
+                              style: TextStyle(color: Colors.white54)),
+                          trailing: const SizedBox(),
+                        ),
+                ),
+              ),
             ),
           ],
         ),

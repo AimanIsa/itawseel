@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Components/mybutton.dart';
-import 'package:itawseel/Components/mytextfields.dart';
 import 'package:itawseel/pages/Customer/chooserunner.dart';
 import 'package:itawseel/themes/colors.dart';
 
@@ -27,8 +26,8 @@ class _OrderDetailsState extends State<OrderDetails> {
       builder: (context) => Theme(
         data: Theme.of(context).copyWith(
           dialogTheme: DialogTheme(
-            backgroundColor:
-                Color.fromARGB(255, 255, 255, 255), // Adjust background color
+            backgroundColor: const Color.fromARGB(
+                255, 255, 255, 255), // Adjust background color
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15), // Customize shape
             ),
@@ -39,7 +38,7 @@ class _OrderDetailsState extends State<OrderDetails> {
             child: ListBody(
               children: [
                 const SizedBox(height: 15),
-                Text("Enter your specific Location"),
+                const Text("Enter your specific Location"),
                 const SizedBox(height: 15),
                 TextField(
                   controller: _locationController,
@@ -56,7 +55,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -65,7 +64,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Set Location'),
+              child: const Text('Set Location'),
             ),
           ],
         ),
@@ -126,7 +125,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             const SizedBox(height: 10),
                             Row(
                               children: [
-                                SizedBox(width: 30),
+                                const SizedBox(width: 30),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -187,7 +186,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                           title: Row(
                                             children: [
                                               Text(item['name']),
-                                              Spacer(),
+                                              const Spacer(),
                                               Text(
                                                   ' ${item['quantity']} x RM ${item['price'].toStringAsFixed(2)}')
                                             ],
@@ -208,8 +207,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 20),
-                            SizedBox(height: 20),
-                            const SizedBox(height: 20),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
@@ -220,11 +217,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12)),
                                   hintText: "Block D, Uthman",
-                                  label: Text("Enter your location"),
+                                  label: const Text("Enter your location"),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -245,17 +242,17 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     }),
                               ],
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Visibility(
                               visible: _selectedLocation == 'Location',
-                              child: Text(
+                              child: const Text(
                                   "To continue, Please enter you location"),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 80),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 70),
                       child: Visibility(
