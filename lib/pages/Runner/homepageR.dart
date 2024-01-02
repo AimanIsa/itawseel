@@ -110,6 +110,7 @@ class _HomepageRState extends State<HomepageR> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Available Orders',
           style: TextStyle(color: white),

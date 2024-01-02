@@ -103,7 +103,7 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                     QuickAlert.show(
                       context: context,
                       type: QuickAlertType.success,
-                      text: 'Congrats, The customer choose you',
+                      text: 'Congrats, The customer chose you',
                       showConfirmBtn: true,
                     );
                   });
