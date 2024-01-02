@@ -32,29 +32,6 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
-  Card buildButton({
-    required onTap,
-    required title,
-    required text,
-  }) {
-    return Card(
-      shape: const StadiumBorder(),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 20,
-      ),
-      clipBehavior: Clip.antiAlias,
-      elevation: 1,
-      child: ListTile(
-        onTap: onTap,
-        title: Text(title ?? ""),
-        subtitle: Text(text ?? ""),
-        trailing: const Icon(
-          Icons.keyboard_arrow_right_rounded,
-        ),
-      ),
-    );
-  }
-
   void saveOrderToFirestore(List<CartItem> cartItem) async {
     try {
       await FirebaseFirestore.instance.collection('orders').doc().get();
@@ -111,12 +88,10 @@ class _CartPageState extends State<CartPage> {
 
       setState(() {
         QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          text: 'Order placed successfully!',
-          // autoCloseDuration: const Duration(seconds: 2),
-          showConfirmBtn: true,
-        );
+            context: context,
+            type: QuickAlertType.success,
+            text: 'Order Placed Successfully!',
+            showConfirmBtn: true);
       });
     } catch (error) {
       // Handle errors gracefully

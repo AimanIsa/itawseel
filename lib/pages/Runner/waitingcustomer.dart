@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itawseel/pages/Runner/homepageR.dart';
 import 'package:itawseel/pages/Runner/trackorder.dart';
 import 'package:itawseel/themes/colors.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class WaitingForCustomerPage extends StatefulWidget {
   final String orderId;
@@ -72,11 +75,27 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                     ),
                   ),
                 );
+                QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.success,
+                    text: 'Congrats, The customer choose you',
+                    showConfirmBtn: true);
               });
             } else {
               // Handle other offer statuses if needed
-              return const Center(
-                  child: Text('Sorry This order has been taken'));
+              Future.delayed(Duration.zero, () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomepageR(),
+                  ),
+                );
+                QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    text: 'Sorry, the order is already taken',
+                    showConfirmBtn: true);
+              });
             }
 
             return const SizedBox(); // Should never reach here
