@@ -115,6 +115,12 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                       builder: (context) => HomepageR(),
                     ),
                   );
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    text: 'Sorry, the order is already taken',
+                    showConfirmBtn: true,
+                  );
 
                   // Replace with your homepage route
                 }
