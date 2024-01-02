@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:itawseel/pages/Customer/homepagec.dart';
-import 'package:itawseel/pages/Runner/homepageR.dart';
+import 'package:itawseel/Components/navigationR.dart';
+
 import 'package:itawseel/pages/Runner/trackorder.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -112,7 +112,7 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomepageR(),
+                      builder: (context) => NavigationR(),
                     ),
                   );
                   QuickAlert.show(
