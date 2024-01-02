@@ -79,7 +79,7 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                   CircularProgressIndicator(),
                 ],
               );
-            } else if (offerStatus == 'riderSelected') {
+            } else if (offerStatus == 'riderselected') {
               // Check if this user is the chosen rider
               // Fetch the chosen riderId from Firestore
               FirebaseFirestore.instance

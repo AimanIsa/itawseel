@@ -88,18 +88,28 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                       } else if (index == 0) {
                         return Visibility(
                             visible: index != 0 || riderId.isNotEmpty,
-                            child: Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SizedBox(height: 10),
-                                  Text(
-                                    'Waiting for runner...',
-                                    style: TextStyle(color: white),
-                                  ),
-                                  SizedBox(height: 20),
-                                  CircularProgressIndicator(
-                                    color: white,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(width: 10),
+                                      Text(
+                                        'Waiting for runner...',
+                                        style: TextStyle(color: white),
+                                      ),
+                                      Spacer(),
+                                      CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                white),
+                                        color: white,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
