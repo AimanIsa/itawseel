@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:itawseel/Components/mybutton.dart';
+import 'package:itawseel/Components/navigationR.dart';
 import 'package:itawseel/pages/Customer/edit_profile.dart';
 import 'package:itawseel/themes/colors.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class ProfileR extends StatefulWidget {
   const ProfileR({super.key});
@@ -13,6 +20,41 @@ class ProfileR extends StatefulWidget {
 }
 
 class _ProfileRState extends State<ProfileR> {
+  XFile? _pickedImage;
+  String _imageUrl = ''; // Initialize with empty string
+
+  Future<void> _pickImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _pickedImage = image;
+      });
+      _uploadImage();
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_pickedImage != null) {
+      try {
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('Qrcode_images')
+            .child(FirebaseAuth.instance.currentUser!.uid + '.jpg');
+        final uploadTask = ref.putFile(File(_pickedImage!.path));
+        final url = await (await uploadTask).ref.getDownloadURL();
+        setState(() {
+          _imageUrl = url;
+        });
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(FirebaseAuth.instance.currentUser!.email)
+            .update({'QrCode': url});
+      } catch (error) {
+        print('Error uploading image: $error');
+      }
+    }
+  }
+
   final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
@@ -25,6 +67,7 @@ class _ProfileRState extends State<ProfileR> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final userDoc = snapshot.data!;
+            final imageUrl = userDoc['QrCode'];
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -34,13 +77,6 @@ class _ProfileRState extends State<ProfileR> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 20),
-                        // Text("PROFILE",
-                        //     style: TextStyle(
-                        //         fontSize: 20,
-                        //         fontWeight: FontWeight.bold,
-                        //         color: primaryColor)),
-                        SizedBox(height: 20),
                         Card(
                           color: primaryColor,
                           child: Padding(
@@ -128,19 +164,35 @@ class _ProfileRState extends State<ProfileR> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 8),
                         Divider(),
-                        SizedBox(height: 200),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 70),
-                          child: MyButton(
-                              text: "Logout",
-                              onTap: () {
-                                FirebaseAuth.instance.signOut();
-                                Navigator.popUntil(
-                                    context, ModalRoute.withName("/"));
-                              }),
-                        )
+                        SizedBox(height: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: imageUrl.isEmpty
+                              ? ElevatedButton(
+                                  onPressed: _pickImage,
+                                  child: const Text('Upload Your Qr code Here'),
+                                )
+                              : Card(
+                                  color: primaryColor,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Image.network(
+                                      imageUrl,
+                                      width: 400,
+                                      height: 400,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            _pickImage();
+                          },
+                          child: const Text('Update Qr code'),
+                        ),
                       ],
                     ),
                   ),

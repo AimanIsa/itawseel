@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itawseel/Components/navigationR.dart';
 import 'package:itawseel/themes/colors.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class TrackOrderRunnerPage extends StatefulWidget {
   final String orderId;
@@ -263,6 +266,39 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
                               ),
                             ),
                           ),
+                          TextButton(
+                              onPressed: () {
+                                QuickAlert.show(
+                                  onCancelBtnTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  onConfirmBtnTap: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                NavigationR()));
+                                  },
+                                  context: context,
+                                  type: QuickAlertType.confirm,
+                                  text: 'to go back to homepage?',
+                                  titleAlignment: TextAlign.center,
+                                  textAlignment: TextAlign.center,
+                                  confirmBtnText: 'Yes',
+                                  cancelBtnText: 'No',
+                                  confirmBtnColor: Colors.white,
+                                  backgroundColor: white,
+                                  headerBackgroundColor: Colors.grey,
+                                  confirmBtnTextStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  barrierColor: primaryColor,
+                                  titleColor: Colors.black,
+                                  textColor: Colors.black,
+                                );
+                              },
+                              child: Text("Go back to hompage"))
                         ],
                       ),
                     ],
