@@ -80,13 +80,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ),
                                     Text(
-                                      userDoc['location'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: Colors.white),
-                                    ),
-                                    Text(
                                       userDoc['phonenumber'],
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,

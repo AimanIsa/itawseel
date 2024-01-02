@@ -48,53 +48,200 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
           final chosenRiderId = orderData!['chosenRiderId'] as String;
           final offerStatus = orderData['offerStatus'] as String;
 
-          return Column(
-            children: [
-              Expanded(
-                child: Column(
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+                Column(
                   children: [
-                    // Item details
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: orderData['fooditem'].length,
-                      itemBuilder: (context, index) {
-                        final item = orderData['fooditem'][index];
-                        return ListTile(
-                          title: Text(item['name']),
-                          trailing: Text(
-                              '${item['price']}'), // Adjust currency formatting
-                        );
-                      },
-                    ),
-
-                    // Chosen rider and total price
-                    Column(
+                    const SizedBox(height: 10),
+                    const Row(
                       children: [
-                        Text('Chosen Rider: ${orderData['chosenRiderId']}'),
-                        const SizedBox(height: 8.0),
+                        SizedBox(width: 30),
                         Text(
-                            'Total Price: ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}'),
+                          "Tracking Progress",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
                       ],
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: primaryColor),
+                            child: _buildTimeline(offerStatus)),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Text("Track"),
-              // Middle section with timeline
-              Expanded(
-                child: _buildTimeline(offerStatus),
-              ),
+                // Item details
+                Divider(),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      const Row(
+                        children: [
+                          SizedBox(width: 20),
+                          Text(
+                            'Details',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ListTile(
+                          visualDensity:
+                              VisualDensity(horizontal: 0, vertical: -4),
+                          title: const Text(
+                            'Charge Fees: ',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          trailing: Text(
+                            'RM ${orderData!['offeredChargeFees'].toString()}',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ListTile(
+                          visualDensity:
+                              VisualDensity(horizontal: 0, vertical: -4),
+                          title: const Text(
+                            'Location: ',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          trailing: Text(
+                            orderData['location'],
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10.0),
+                      const Row(
+                        children: [
+                          SizedBox(width: 20),
+                          Text(
+                            "Food Items",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: orderData['fooditem'].length,
+                            itemBuilder: (context, index) {
+                              final item = orderData['fooditem'][index];
 
-              // Bottom section with chat button
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton.icon(
-                  onPressed: () => _startChat(chosenRiderId),
-                  icon: const Icon(Icons.chat),
-                  label: const Text('Chat with Rider'),
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: ListTile(
+                                  title: Row(
+                                    children: [
+                                      Text(item['name'],
+                                          style: TextStyle(fontSize: 15)),
+                                      const SizedBox(width: 30),
+                                      Text(
+                                        ' x ${item['quantity'].toString()} ',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+
+                                  trailing: Text(
+                                    'RM ${item['price']}',
+                                    style: TextStyle(fontSize: 15),
+                                  ), // Adjust currency formatting
+                                ),
+                              );
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ListTile(
+                              visualDensity:
+                                  VisualDensity(horizontal: 0, vertical: -4),
+                              title: const Text(
+                                'Total Item Price : ',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              trailing: Text(
+                                // Calculate the total price directly
+                                'RM ${(orderData['totalPrice'] as num)}',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ListTile(
+                              visualDensity:
+                                  VisualDensity(horizontal: 0, vertical: -4),
+                              title: const Text(
+                                'Total Items Price + Fees : ',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              trailing: Text(
+                                // Calculate the total price directly
+                                'RM ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          // Chosen rider and total price
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+
+                // Chosen rider and total price
+                Column(
+                  children: [
+                    Text('Chosen Rider: ${orderData['chosenRiderId']}'),
+                    const SizedBox(height: 8.0),
+                    Text(
+                        'Total Price: ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}'),
+                  ],
+                ),
+
+                // Middle section with timeline
+
+                // Bottom section with chat button
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton.icon(
+                    onPressed: () => _startChat(chosenRiderId),
+                    icon: const Icon(Icons.chat),
+                    label: const Text('Chat with Rider'),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -104,6 +251,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   Widget _buildTimeline(String offerStatus) {
     return Column(
       children: [
+        SizedBox(height: 20),
         // Unordered list for a visual timeline
         ListView(
           shrinkWrap: true, // Use a dot as the timeline marker
@@ -111,112 +259,114 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
             // Rider selected
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                color: primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: offerStatus == 'riderselected'
-                      ? ListTile(
-                          leading: Icon(Icons.person_pin, color: white),
-                          title: Text('Rider Selected',
-                              style: TextStyle(color: white)),
-                          trailing:
-                              const Icon(Icons.circle, color: Colors.green))
-                      : const ListTile(
-                          leading: Icon(
-                            Icons.person_pin,
-                            color: Colors.white54,
-                          ),
-                          title: Text('Rider Selected',
-                              style: TextStyle(color: Colors.white54)),
-                          trailing: const SizedBox(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: offerStatus == 'riderselected'
+                    ? Card(
+                        color: white,
+                        child: ListTile(
+                            leading: Icon(Icons.fastfood, color: primaryColor),
+                            title: Text('Rider Selected',
+                                style: TextStyle(color: primaryColor)),
+                            trailing:
+                                const Icon(Icons.circle, color: Colors.green)),
+                      )
+                    : const ListTile(
+                        leading: Icon(
+                          Icons.fastfood,
+                          color: Colors.white54,
                         ),
-                ),
+                        title: Text('Rider',
+                            style: TextStyle(color: Colors.white54)),
+                        trailing: const SizedBox(),
+                      ),
               ),
             ),
 
             // Buying food
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                color: primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: offerStatus == 'buyingFood'
-                      ? ListTile(
-                          leading: Icon(Icons.fastfood, color: white),
-                          title: Text('Buying Food',
-                              style: TextStyle(color: white)),
-                          trailing:
-                              const Icon(Icons.circle, color: Colors.green))
-                      : const ListTile(
-                          leading: Icon(
-                            Icons.fastfood,
-                            color: Colors.white54,
-                          ),
-                          title: Text('Buying Food',
-                              style: TextStyle(color: Colors.white54)),
-                          trailing: const SizedBox(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: offerStatus == 'buyingFood'
+                    ? Card(
+                        color: white,
+                        child: ListTile(
+                            leading: Icon(Icons.fastfood, color: primaryColor),
+                            title: Text('Buying Food',
+                                style: TextStyle(color: primaryColor)),
+                            trailing:
+                                const Icon(Icons.circle, color: Colors.green)),
+                      )
+                    : const ListTile(
+                        leading: Icon(
+                          Icons.fastfood,
+                          color: Colors.white54,
                         ),
-                ),
+                        title: Text('Buying Food',
+                            style: TextStyle(color: Colors.white54)),
+                        trailing: const SizedBox(),
+                      ),
               ),
             ),
 
             // On the way
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                color: primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: offerStatus == 'onTheWay'
-                      ? ListTile(
-                          leading: Icon(Icons.delivery_dining, color: white),
-                          title: Text('On The Way',
-                              style: TextStyle(color: white)),
-                          trailing:
-                              const Icon(Icons.circle, color: Colors.green))
-                      : const ListTile(
-                          leading: Icon(
-                            Icons.delivery_dining_outlined,
-                            color: Colors.white54,
-                          ),
-                          title: Text('On The Way',
-                              style: TextStyle(color: Colors.white54)),
-                          trailing: const SizedBox(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: offerStatus == 'onTheWay'
+                    ? Card(
+                        color: white,
+                        child: ListTile(
+                            leading: Icon(Icons.delivery_dining,
+                                color: primaryColor),
+                            title: Text('On The Way',
+                                style: TextStyle(color: primaryColor)),
+                            trailing:
+                                const Icon(Icons.circle, color: Colors.green)),
+                      )
+                    : const ListTile(
+                        leading: Icon(
+                          Icons.delivery_dining_outlined,
+                          color: Colors.white54,
                         ),
-                ),
+                        title: Text('On The Way',
+                            style: TextStyle(color: Colors.white54)),
+                        trailing: const SizedBox(),
+                      ),
               ),
             ),
 
             // Completed
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                color: primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: offerStatus == 'completed'
-                      ? ListTile(
-                          leading: Icon(Icons.check, color: white),
-                          title:
-                              Text('Completed', style: TextStyle(color: white)),
-                          trailing:
-                              const Icon(Icons.circle, color: Colors.green))
-                      : const ListTile(
-                          leading: Icon(
-                            Icons.check,
-                            color: Colors.white54,
-                          ),
-                          title: Text('Completed',
-                              style: TextStyle(color: Colors.white54)),
-                          trailing: const SizedBox(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: offerStatus == 'arrived'
+                    ? Card(
+                        color: white,
+                        child: ListTile(
+                            leading: Icon(Icons.check, color: primaryColor),
+                            title: Text('Arrived',
+                                style: TextStyle(color: primaryColor)),
+                            trailing:
+                                const Icon(Icons.circle, color: Colors.green)),
+                      )
+                    : const ListTile(
+                        leading: Icon(
+                          Icons.check,
+                          color: Colors.white54,
                         ),
-                ),
+                        title: Text('Arrived',
+                            style: TextStyle(color: Colors.white54)),
+                        trailing: const SizedBox(),
+                      ),
               ),
             ),
           ],
         ),
+        SizedBox(height: 20),
       ],
     );
   }

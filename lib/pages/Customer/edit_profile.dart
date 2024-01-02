@@ -20,7 +20,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
   String? _editedName;
   String? _editedPhoneNumber;
-  String? _editedMahallah;
   File? _profileImage;
 
   Card buildButton({
@@ -77,7 +76,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .update({
         'username': _editedName,
         'phonenumber': _editedPhoneNumber,
-        'location': _editedMahallah
       });
       setState(() {
         QuickAlert.show(
@@ -183,18 +181,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               const SizedBox(height: 20),
                               const Text("New Location: "),
                               const SizedBox(height: 10),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: primaryColor),
-                                  borderRadius: BorderRadius.circular(8),
-                                )),
-                                initialValue: userDoc['location'],
-                                validator: (value) => value!.isEmpty
-                                    ? 'Please enter your phone number'
-                                    : null,
-                                onSaved: (value) => _editedMahallah = value,
-                              ),
                             ],
                           ),
                         ),

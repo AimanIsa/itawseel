@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Components/mydrawer.dart';
+import 'package:itawseel/pages/Main/choosehome.dart';
 import 'package:itawseel/pages/Runner/HomepageR.dart';
 import 'package:itawseel/pages/Runner/chatR.dart';
 import 'package:itawseel/pages/Runner/historyR.dart';
@@ -57,9 +58,12 @@ class _NavigationState extends State<NavigationR> {
         actions: [
           IconButton(
               onPressed: () {
-                _signout();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ChooseCategory()));
               },
-              icon: const Icon(Icons.login),
+              icon: const Icon(Icons.home),
               color: const Color.fromARGB(255, 255, 255, 255))
         ],
         toolbarHeight: 70,

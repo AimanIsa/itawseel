@@ -5,6 +5,7 @@ import 'package:itawseel/pages/Customer/chatlist.dart';
 import 'package:itawseel/pages/Customer/historyc.dart';
 import 'package:itawseel/pages/Customer/homepagec.dart';
 import 'package:itawseel/pages/Customer/profile.dart';
+import 'package:itawseel/pages/Main/choosehome.dart';
 import 'package:itawseel/themes/colors.dart';
 
 class Navigation extends StatefulWidget {
@@ -50,13 +51,12 @@ class _NavigationState extends State<Navigation> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ProfilePage()));
+                        builder: (context) => const ChooseCategory()));
               },
-              icon: const Icon(Icons.person_2_outlined),
+              icon: const Icon(Icons.home),
               color: const Color.fromARGB(255, 255, 255, 255))
         ],
         toolbarHeight: 70,

@@ -71,7 +71,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                                   .doc(widget.orderId)
                                   .update({
                                 'Runnerusername': riderUsername,
-                                'offerStatus': 'riderSelected',
+                                'offerStatus': 'riderselected',
                                 'chosenRiderId': riderId,
                                 'offeredChargeFees': offeredPrice,
                                 // Add other chosen rider details if needed

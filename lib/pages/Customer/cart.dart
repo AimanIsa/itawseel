@@ -18,7 +18,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   final List<CartItem> _cartItems = [];
-  final String _selectedLocation = 'Location';
+  final String _selectedLocation = 'yourlocation';
 
   @override
   void initState() {
@@ -37,7 +37,6 @@ class _CartPageState extends State<CartPage> {
       await FirebaseFirestore.instance.collection('orders').doc().get();
       // Generate a unique order ID
       final orderId = FirebaseFirestore.instance.collection('orders').doc().id;
-      final user = FirebaseAuth.instance.currentUser!;
 
 // Create order data
       final orderData = {
@@ -67,11 +66,6 @@ class _CartPageState extends State<CartPage> {
           .collection('orders')
           .doc(orderId)
           .set(orderData);
-
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user.email) // Access the specific order document
-          .update({'location': _selectedLocation});
 
       // Clear cart (optional)
       widget.cartItems.clear();

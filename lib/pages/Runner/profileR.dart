@@ -167,6 +167,11 @@ class _ProfileRState extends State<ProfileR> {
                         SizedBox(height: 8),
                         Divider(),
                         SizedBox(height: 8),
+                        Text("Qr Code",
+                            style: TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
                         Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10)),

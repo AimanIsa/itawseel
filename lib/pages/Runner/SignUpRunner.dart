@@ -57,7 +57,8 @@ class _RunnerSignUpPageState extends State<RunnerSignUpPage> {
           'isRunner': true,
           'matricNumber': matricNumberController.text,
           'gender': genderController.text,
-          'riderId': riderId, // Add rider ID creation
+          'riderId': riderId,
+          'QrCode': "", // Add rider ID creation
         });
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => NavigationR()));

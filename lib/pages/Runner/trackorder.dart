@@ -44,6 +44,39 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
               color: const Color.fromARGB(255, 255, 255, 255))
         ],
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+            onPressed: () {
+              QuickAlert.show(
+                onCancelBtnTap: () {
+                  Navigator.pop(context);
+                },
+                onConfirmBtnTap: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => NavigationR()));
+                },
+                context: context,
+                type: QuickAlertType.confirm,
+                text: 'to go back to homepage?, (your order will be lost)',
+                titleAlignment: TextAlign.center,
+                textAlignment: TextAlign.center,
+                confirmBtnText: 'Yes',
+                cancelBtnText: 'No',
+                confirmBtnColor: Colors.white,
+                backgroundColor: white,
+                headerBackgroundColor: Colors.grey,
+                confirmBtnTextStyle: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                barrierColor: Color.fromARGB(106, 255, 255, 255),
+                titleColor: Colors.black,
+                textColor: Colors.black,
+              );
+            },
+            child: Text("Go back to hompage")),
+      ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: _orderStream,
         builder: (context, snapshot) {
@@ -266,39 +299,8 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
                               ),
                             ),
                           ),
-                          TextButton(
-                              onPressed: () {
-                                QuickAlert.show(
-                                  onCancelBtnTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  onConfirmBtnTap: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                NavigationR()));
-                                  },
-                                  context: context,
-                                  type: QuickAlertType.confirm,
-                                  text: 'to go back to homepage?',
-                                  titleAlignment: TextAlign.center,
-                                  textAlignment: TextAlign.center,
-                                  confirmBtnText: 'Yes',
-                                  cancelBtnText: 'No',
-                                  confirmBtnColor: Colors.white,
-                                  backgroundColor: white,
-                                  headerBackgroundColor: Colors.grey,
-                                  confirmBtnTextStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  barrierColor: primaryColor,
-                                  titleColor: Colors.black,
-                                  textColor: Colors.black,
-                                );
-                              },
-                              child: Text("Go back to hompage"))
+                          const SizedBox(height: 40),
+                          // Chosen rider and total price
                         ],
                       ),
                     ],
