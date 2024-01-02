@@ -333,7 +333,6 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
         ),
       ],
     );
-    ;
   }
 
   void _updateOfferStatus(String newStatus) async {
