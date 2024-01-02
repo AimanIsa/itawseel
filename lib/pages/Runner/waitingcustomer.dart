@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itawseel/pages/Customer/homepagec.dart';
 import 'package:itawseel/pages/Runner/homepageR.dart';
 import 'package:itawseel/pages/Runner/trackorder.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WaitingForCustomerPage extends StatefulWidget {
   final String orderId;
@@ -18,6 +20,9 @@ class WaitingForCustomerPage extends StatefulWidget {
 
 class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
   late Stream<DocumentSnapshot<Map<String, dynamic>>> _orderStream;
+  late Stream<DocumentSnapshot<Map<String, dynamic>>> _userStream;
+  String? currentRiderId;
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   void initState() {
@@ -26,6 +31,17 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
         .collection('orders')
         .doc(widget.orderId)
         .snapshots();
+
+    // Second stream (example for fetching a user document)
+    _userStream = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(user.email) // Replace with appropriate identifier
+        .snapshots();
+    _userStream.listen((userSnapshot) {
+      setState(() {
+        currentRiderId = userSnapshot.data()!['riderId'];
+      });
+    });
   }
 
   @override
@@ -65,37 +81,48 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
               );
             } else if (offerStatus == 'riderSelected') {
               // Check if this user is the chosen rider
+              // Fetch the chosen riderId from Firestore
+              FirebaseFirestore.instance
+                  .collection('orders')
+                  .doc(widget.orderId)
+                  .get()
+                  .then((doc) {
+                final chosenRiderId = doc.data()!['chosenRiderId'];
 
-              Future.delayed(Duration.zero, () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TrackOrderRunnerPage(
-                      orderId: widget.orderId,
+                // Check if this user is the chosen rider
+                if (chosenRiderId == currentRiderId) {
+                  Future.delayed(Duration.zero, () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TrackOrderRunnerPage(
+                          orderId: widget.orderId,
+                        ),
+                      ),
+                    );
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.success,
+                      text: 'Congrats, The customer choose you',
+                      showConfirmBtn: true,
+                    );
+                  });
+                } else {
+                  // Redirect to homepage if not the chosen rider
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomepageR(),
                     ),
-                  ),
-                );
-                QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.success,
-                    text: 'Congrats, The customer choose you',
-                    showConfirmBtn: true);
+                  );
+
+                  // Replace with your homepage route
+                }
               });
             } else {
               // Handle other offer statuses if needed
-              Future.delayed(Duration.zero, () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomepageR(),
-                  ),
-                );
-                QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.error,
-                    text: 'Sorry, the order is already taken',
-                    showConfirmBtn: true);
-              });
+              return const Center(
+                  child: Text('Sorry This order has been taken'));
             }
 
             return const SizedBox(); // Should never reach here
