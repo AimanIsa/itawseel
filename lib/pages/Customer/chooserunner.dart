@@ -93,16 +93,16 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                                   const EdgeInsets.symmetric(horizontal: 25),
                               child: Column(
                                 children: [
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                       Text(
                                         'Waiting for runner...',
                                         style: TextStyle(color: white),
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       CircularProgressIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
@@ -115,6 +115,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                               ),
                             ));
                       }
+                      return null;
                     },
                   );
                 } else {
@@ -162,7 +163,7 @@ class _RunnerCardState extends State<RunnerCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ElevatedButton(

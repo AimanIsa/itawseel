@@ -82,7 +82,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ],
                 ),
                 // Item details
-                Divider(),
+                const Divider(),
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -103,14 +103,14 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: ListTile(
                           visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
+                              const VisualDensity(horizontal: 0, vertical: -4),
                           title: const Text(
                             'Charge Fees: ',
                             style: TextStyle(fontSize: 15),
                           ),
                           trailing: Text(
-                            'RM ${orderData!['offeredChargeFees'].toString()}',
-                            style: TextStyle(
+                            'RM ${orderData['offeredChargeFees'].toString()}',
+                            style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -119,14 +119,14 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: ListTile(
                           visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
+                              const VisualDensity(horizontal: 0, vertical: -4),
                           title: const Text(
                             'Location: ',
                             style: TextStyle(fontSize: 15),
                           ),
                           trailing: Text(
                             orderData['location'],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -158,18 +158,18 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                                   title: Row(
                                     children: [
                                       Text(item['name'],
-                                          style: TextStyle(fontSize: 15)),
+                                          style: const TextStyle(fontSize: 15)),
                                       const SizedBox(width: 30),
                                       Text(
                                         ' x ${item['quantity'].toString()} ',
-                                        style: TextStyle(fontSize: 15),
+                                        style: const TextStyle(fontSize: 15),
                                       ),
                                     ],
                                   ),
 
                                   trailing: Text(
                                     'RM ${item['price']}',
-                                    style: TextStyle(fontSize: 15),
+                                    style: const TextStyle(fontSize: 15),
                                   ), // Adjust currency formatting
                                 ),
                               );
@@ -178,8 +178,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: ListTile(
-                              visualDensity:
-                                  VisualDensity(horizontal: 0, vertical: -4),
+                              visualDensity: const VisualDensity(
+                                  horizontal: 0, vertical: -4),
                               title: const Text(
                                 'Total Item Price : ',
                                 style: TextStyle(
@@ -188,7 +188,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                               trailing: Text(
                                 // Calculate the total price directly
                                 'RM ${(orderData['totalPrice'] as num)}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -196,8 +196,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: ListTile(
-                              visualDensity:
-                                  VisualDensity(horizontal: 0, vertical: -4),
+                              visualDensity: const VisualDensity(
+                                  horizontal: 0, vertical: -4),
                               title: const Text(
                                 'Total Items Price + Fees : ',
                                 style: TextStyle(
@@ -206,7 +206,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                               trailing: Text(
                                 // Calculate the total price directly
                                 'RM ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -251,7 +251,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   Widget _buildTimeline(String offerStatus) {
     return Column(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         // Unordered list for a visual timeline
         ListView(
           shrinkWrap: true, // Use a dot as the timeline marker
@@ -278,7 +278,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         ),
                         title: Text('Rider',
                             style: TextStyle(color: Colors.white54)),
-                        trailing: const SizedBox(),
+                        trailing: SizedBox(),
                       ),
               ),
             ),
@@ -305,7 +305,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         ),
                         title: Text('Buying Food',
                             style: TextStyle(color: Colors.white54)),
-                        trailing: const SizedBox(),
+                        trailing: SizedBox(),
                       ),
               ),
             ),
@@ -333,7 +333,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         ),
                         title: Text('On The Way',
                             style: TextStyle(color: Colors.white54)),
-                        trailing: const SizedBox(),
+                        trailing: SizedBox(),
                       ),
               ),
             ),
@@ -360,13 +360,13 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         ),
                         title: Text('Arrived',
                             style: TextStyle(color: Colors.white54)),
-                        trailing: const SizedBox(),
+                        trailing: SizedBox(),
                       ),
               ),
             ),
           ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
   }

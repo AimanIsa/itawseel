@@ -39,7 +39,7 @@ class _HomepageState extends State<Homepage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 35),
+                            padding: const EdgeInsets.only(left: 35),
                             child: Row(
                               children: [
                                 const Text('Hello',
@@ -54,8 +54,8 @@ class _HomepageState extends State<Homepage> {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 35),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 35),
                             child: Text("So, what's on your menu for today?"),
                           ),
                           const SizedBox(height: 20),

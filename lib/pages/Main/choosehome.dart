@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Components/navigation.dart';
-import 'package:itawseel/pages/Login&SignUp/loginpage.dart';
 import 'package:itawseel/pages/Main/splash.dart';
 import 'package:itawseel/pages/Runner/SignUpRunner.dart';
 import 'package:itawseel/themes/colors.dart';
