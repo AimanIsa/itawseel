@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itawseel/Components/navigation.dart';
+import 'package:itawseel/pages/Customer/homepagec.dart';
 import 'package:itawseel/pages/Customer/payment.dart';
 
 import 'package:itawseel/themes/colors.dart';
@@ -46,9 +48,23 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          'Track Order',
-          style: TextStyle(color: white),
+        title: Row(
+          children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Navigation(),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.home)),
+            Text(
+              'Track Order',
+              style: TextStyle(color: white),
+            ),
+          ],
         ),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.message))],
       ),

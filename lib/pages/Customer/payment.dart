@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:itawseel/Components/navigation.dart';
 import 'package:itawseel/themes/colors.dart';
 
 class PaymentDetails extends StatefulWidget {
@@ -33,9 +34,23 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          "Payment Method",
-          style: TextStyle(color: white),
+        title: Row(
+          children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Navigation(),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.home)),
+            Text(
+              "Payment Method",
+              style: TextStyle(color: white),
+            ),
+          ],
         ),
       ),
       body: Center(
@@ -54,8 +69,8 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                         "Select Your Payment Method",
                         style: TextStyle(color: white, fontSize: 18),
                       ),
-                      SizedBox(height: 8),
-                      Divider(),
+                      const SizedBox(height: 8),
+                      const Divider(),
                       PopupMenuButton<String>(
                         initialValue: _selectedPaymentMethod,
                         onSelected: (newValue) {
@@ -64,7 +79,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                           });
                         },
                         itemBuilder: (context) => <PopupMenuEntry<String>>[
-                          PopupMenuItem<String>(
+                          const PopupMenuItem<String>(
                             value: 'Cash',
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +90,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                               ],
                             ),
                           ),
-                          PopupMenuItem<String>(
+                          const PopupMenuItem<String>(
                             value: 'QrCode',
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,7 +105,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                         child: Text(
                           _selectedPaymentMethod ??
                               'Select Payment Method', // Display selected item or placeholder
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       )
                     ],
@@ -98,7 +113,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Card(
@@ -118,154 +133,150 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     final chosenRiderId = orderData!['chosenRiderId'] as String;
                     final offerStatus = orderData['offerStatus'] as String;
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          const Row(
-                            children: [
-                              SizedBox(width: 20),
-                              Text(
-                                'Details',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8.0),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: ListTile(
-                              visualDensity: const VisualDensity(
-                                  horizontal: 0, vertical: -4),
-                              title: const Text(
-                                'Charge Fees: ',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              trailing: Text(
-                                'RM ${orderData['offeredChargeFees'].toString()}',
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
+                    return Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        const Row(
+                          children: [
+                            SizedBox(width: 20),
+                            Text(
+                              'Details',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ListTile(
+                            visualDensity: const VisualDensity(
+                                horizontal: 0, vertical: -4),
+                            title: const Text(
+                              'Charge Fees: ',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            trailing: Text(
+                              'RM ${orderData['offeredChargeFees'].toString()}',
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: ListTile(
-                              visualDensity: const VisualDensity(
-                                  horizontal: 0, vertical: -4),
-                              title: const Text(
-                                'Location: ',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              trailing: Text(
-                                orderData['location'],
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ListTile(
+                            visualDensity: const VisualDensity(
+                                horizontal: 0, vertical: -4),
+                            title: const Text(
+                              'Location: ',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            trailing: Text(
+                              orderData['location'],
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          const SizedBox(height: 10.0),
-                          const Row(
-                            children: [
-                              SizedBox(width: 20),
-                              Text(
-                                "Food Items",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: orderData['fooditem'].length,
-                                itemBuilder: (context, index) {
-                                  final item = orderData['fooditem'][index];
+                        ),
+                        const SizedBox(height: 10.0),
+                        const Row(
+                          children: [
+                            SizedBox(width: 20),
+                            Text(
+                              "Food Items",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: orderData['fooditem'].length,
+                              itemBuilder: (context, index) {
+                                final item = orderData['fooditem'][index];
 
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: ListTile(
-                                      title: Row(
-                                        children: [
-                                          Text(item['name'],
-                                              style: const TextStyle(
-                                                  fontSize: 15)),
-                                          const SizedBox(width: 30),
-                                          Text(
-                                            ' x ${item['quantity'].toString()} ',
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ListTile(
+                                    title: Row(
+                                      children: [
+                                        Text(item['name'],
                                             style:
-                                                const TextStyle(fontSize: 15),
-                                          ),
-                                        ],
-                                      ),
-
-                                      trailing: Text(
-                                        'RM ${item['price']}',
-                                        style: const TextStyle(fontSize: 15),
-                                      ), // Adjust currency formatting
+                                                const TextStyle(fontSize: 15)),
+                                        const SizedBox(width: 30),
+                                        Text(
+                                          ' x ${item['quantity'].toString()} ',
+                                          style: const TextStyle(fontSize: 15),
+                                        ),
+                                      ],
                                     ),
-                                  );
-                                },
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: ListTile(
-                                  visualDensity: const VisualDensity(
-                                      horizontal: 0, vertical: -4),
-                                  title: const Text(
-                                    'Total Item Price : ',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+
+                                    trailing: Text(
+                                      'RM ${item['price']}',
+                                      style: const TextStyle(fontSize: 15),
+                                    ), // Adjust currency formatting
                                   ),
-                                  trailing: Text(
-                                    // Calculate the total price directly
-                                    'RM ${(orderData['totalPrice'] as num)}',
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                );
+                              },
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: ListTile(
+                                visualDensity: const VisualDensity(
+                                    horizontal: 0, vertical: -4),
+                                title: const Text(
+                                  'Total Item Price : ',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                trailing: Text(
+                                  // Calculate the total price directly
+                                  'RM ${(orderData['totalPrice'] as num)}',
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: ListTile(
-                                  visualDensity: const VisualDensity(
-                                      horizontal: 0, vertical: -4),
-                                  title: const Text(
-                                    'Total Items Price + Fees : ',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  trailing: Text(
-                                    // Calculate the total price directly
-                                    'RM ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}',
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: ListTile(
+                                visualDensity: const VisualDensity(
+                                    horizontal: 0, vertical: -4),
+                                title: const Text(
+                                  'Total Items Price + Fees : ',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                trailing: Text(
+                                  // Calculate the total price directly
+                                  'RM ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}',
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              const SizedBox(height: 20),
-                              // Chosen rider and total price
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                            const SizedBox(height: 20),
+                            // Chosen rider and total price
+                          ],
+                        ),
+                      ],
                     );
                   },
                 ),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),

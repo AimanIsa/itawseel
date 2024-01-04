@@ -30,12 +30,27 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isarrived = true;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          'Track Order',
-          style: TextStyle(color: white),
+        title: Row(
+          children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NavigationR(),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.home)),
+            Text(
+              'Track Order',
+              style: TextStyle(color: white),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -43,41 +58,6 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
               icon: const Icon(Icons.message),
               color: const Color.fromARGB(255, 255, 255, 255))
         ],
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-            onPressed: () {
-              QuickAlert.show(
-                onCancelBtnTap: () {
-                  Navigator.pop(context);
-                },
-                onConfirmBtnTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NavigationR()));
-                },
-                context: context,
-                type: QuickAlertType.confirm,
-                text: 'to go back to homepage?, (your order will be lost)',
-                titleAlignment: TextAlign.center,
-                textAlignment: TextAlign.center,
-                confirmBtnText: 'Yes',
-                cancelBtnText: 'No',
-                confirmBtnColor: Colors.white,
-                backgroundColor: white,
-                headerBackgroundColor: Colors.grey,
-                confirmBtnTextStyle: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-                barrierColor: const Color.fromARGB(106, 255, 255, 255),
-                titleColor: Colors.black,
-                textColor: Colors.black,
-              );
-            },
-            child: const Text("Go back to hompage")),
       ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: _orderStream,
@@ -162,6 +142,7 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor),
                       onPressed: () {
+                        isarrived = true;
                         _updateOfferStatus('arrived');
                       },
                       child: Icon(Icons.check_circle_outline_rounded,
@@ -258,7 +239,7 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
                                   ),
 
                                   trailing: Text(
-                                    'RM ${item['price']}',
+                                    'RM ${item['price'].toStringAsFixed(2)}',
                                     style: const TextStyle(fontSize: 15),
                                   ), // Adjust currency formatting
                                 ),
@@ -312,6 +293,54 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
             ),
           );
         },
+      ),
+      bottomNavigationBar: Visibility(
+        visible: isarrived,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                onPressed: () {
+                  QuickAlert.show(
+                    onCancelBtnTap: () {
+                      Navigator.pop(context);
+                    },
+                    onConfirmBtnTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NavigationR()));
+                    },
+                    context: context,
+                    type: QuickAlertType.confirm,
+                    text: 'Did Customer paid you?',
+                    titleAlignment: TextAlign.center,
+                    textAlignment: TextAlign.center,
+                    confirmBtnText: 'Yes',
+                    cancelBtnText: 'No',
+                    confirmBtnColor: Colors.white,
+                    backgroundColor: white,
+                    headerBackgroundColor: Colors.grey,
+                    confirmBtnTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    barrierColor: const Color.fromARGB(106, 255, 255, 255),
+                    titleColor: Colors.black,
+                    textColor: Colors.black,
+                  );
+                },
+                child: Text(
+                  "Completed",
+                  style: TextStyle(color: white),
+                )),
+          ),
+        ),
       ),
     );
   }

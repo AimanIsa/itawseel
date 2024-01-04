@@ -209,7 +209,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                               });
                               if (_selectedLocation != 'Location') {
                                 // Location is selected, proceed to the next page
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ChooseRunnerPage(

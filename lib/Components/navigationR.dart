@@ -34,7 +34,7 @@ class _NavigationState extends State<NavigationR> {
 
   final List<Widget> _pages = [
     const HomepageR(),
-    const HistoryR(),
+    HistoryR(),
     const ChatR(),
     const ProfileR(),
   ];

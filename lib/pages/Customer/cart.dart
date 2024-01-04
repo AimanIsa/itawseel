@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/pages/Customer/detailsorder.dart';
-import 'package:itawseel/pages/Customer/payment.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -19,6 +19,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   final List<CartItem> _cartItems = [];
   final String _selectedLocation = 'yourlocation';
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _CartPageState extends State<CartPage> {
 
 // Create order data
       final orderData = {
+        'currentemail': FirebaseAuth.instance.currentUser!.email,
         'location': _selectedLocation,
         'orderId': orderId,
         'totalPrice': getTotalPrice(),

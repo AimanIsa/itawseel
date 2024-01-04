@@ -27,7 +27,7 @@ class _NavigationState extends State<Navigation> {
 
   final List<Widget> _pages = [
     const Homepage(),
-    const HistoryC(),
+    HistoryC(),
     const ChatPage(),
     const ProfilePage(),
   ];

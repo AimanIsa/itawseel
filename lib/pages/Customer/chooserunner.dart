@@ -181,8 +181,9 @@ class _RunnerCardState extends State<RunnerCard> {
                           borderRadius: BorderRadiusDirectional.circular(12))),
                   onPressed: () {
                     widget.onChooseRunner();
+                    Navigator.pop(context);
 
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => TrackOrderPage(
