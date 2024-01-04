@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itawseel/pages/Customer/detailsorder.dart';
+import 'package:itawseel/pages/Customer/payment.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -56,6 +57,7 @@ class _CartPageState extends State<CartPage> {
             'riderId': 'rider',
             'username': 'username',
             'imageUrl': 'default',
+            'gender': '',
             'offeredChargeFees': 1,
           }
         ])

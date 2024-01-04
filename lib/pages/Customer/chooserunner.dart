@@ -13,10 +13,12 @@ class ChooseRunnerPage extends StatefulWidget {
 }
 
 class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
+  bool runnerChosen = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Choose Runner',
           style: TextStyle(color: white),
@@ -56,6 +58,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                       final riderUsername = offer['username'] as String;
                       final offeredPrice = offer['offeredChargeFees'] as num;
                       final imageUrl = offer['imageUrl'] as String;
+                      final gender = offer!['gender'] as String;
 
                       // Assuming offered price is a number
                       if (index != 0) {
@@ -84,6 +87,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                             }
                           },
                           orderid: widget.orderId,
+                          gender: gender,
                         );
                       } else if (index == 0) {
                         return Visibility(
@@ -111,6 +115,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                                       ),
                                     ],
                                   ),
+                                  SizedBox(height: 20),
                                 ],
                               ),
                             ));
@@ -140,6 +145,7 @@ class RunnerCard extends StatefulWidget {
   final num offeredChargeFees;
   final String profileImage;
   final String orderid;
+  final String gender;
 
   // Add other runner details...
 
@@ -152,6 +158,7 @@ class RunnerCard extends StatefulWidget {
     required this.onChooseRunner,
     required this.username,
     required this.profileImage,
+    required this.gender,
     required this.orderid,
   }) : super(key: key);
 
@@ -163,70 +170,145 @@ class _RunnerCardState extends State<RunnerCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusDirectional.circular(12))),
-          onPressed: () {
-            widget.onChooseRunner();
+        padding: EdgeInsets.all(10),
+        child: widget.gender == 'Brother'
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(228, 6, 176, 255),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusDirectional.circular(12))),
+                  onPressed: () {
+                    widget.onChooseRunner();
 
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => TrackOrderPage(
-                          orderId: widget.orderid,
-                        )));
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(widget.profileImage),
-                ),
-                const SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('${widget.username}',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold)),
-                    const Text('rating'),
-                  ],
-                ),
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Fee:',
-                      style: TextStyle(color: primaryColor),
-                    ),
-                    Row(
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TrackOrderPage(
+                                  orderId: widget.orderid,
+                                )));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
                       children: [
-                        const Text("RM "),
-                        Text(
-                          '${widget.offeredChargeFees.toStringAsFixed(0)}',
-                          style: TextStyle(
-                              color: primaryColor,
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold),
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(widget.profileImage),
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${widget.username}',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.bold)),
+                            Text(
+                              'Brother',
+                              style: TextStyle(color: primaryColor),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Fee:',
+                              style: TextStyle(color: primaryColor),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "RM ",
+                                  style: TextStyle(color: primaryColor),
+                                ),
+                                Text(
+                                  '${widget.offeredChargeFees.toStringAsFixed(0)}',
+                                  style: TextStyle(
+                                      color: primaryColor,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+              )
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 252, 148, 226),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusDirectional.circular(12))),
+                  onPressed: () {
+                    widget.onChooseRunner();
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TrackOrderPage(
+                                  orderId: widget.orderid,
+                                )));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(widget.profileImage),
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${widget.username}',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.bold)),
+                            Text(
+                              'Sister',
+                              style: TextStyle(color: primaryColor),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Fee:',
+                              style: TextStyle(color: primaryColor),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "RM ",
+                                  style: TextStyle(color: primaryColor),
+                                ),
+                                Text(
+                                  '${widget.offeredChargeFees.toStringAsFixed(0)}',
+                                  style: TextStyle(
+                                      color: primaryColor,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ));
   }
 }

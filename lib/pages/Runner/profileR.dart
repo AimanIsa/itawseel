@@ -64,7 +64,7 @@ class _ProfileRState extends State<ProfileR> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final userDoc = snapshot.data!;
-            final imageUrl = userDoc['QrCode'];
+            final imageUrl = userDoc!['QrCode'];
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -111,7 +111,7 @@ class _ProfileRState extends State<ProfileR> {
                                       ),
                                     ),
                                     Text(
-                                      userDoc['location'],
+                                      userDoc['gender'],
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12,

@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itawseel/pages/Customer/payment.dart';
 
 import 'package:itawseel/themes/colors.dart';
 
@@ -14,6 +16,7 @@ class TrackOrderPage extends StatefulWidget {
 
 class _TrackOrderPageState extends State<TrackOrderPage> {
   late Stream<DocumentSnapshot<Map<String, dynamic>>> _orderStream;
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -24,13 +27,56 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
         .snapshots();
   }
 
+  Future<String?> getRiderId() async {
+    final currentUserUid = FirebaseAuth.instance.currentUser!.email;
+    final userDoc = _firestore.collection('Users').doc(currentUserUid);
+    final riderIdSnapshot = await userDoc.get();
+    return riderIdSnapshot.data()!['riderId'];
+  }
+
+  Future<String?> getusername() async {
+    final currentUserUid = FirebaseAuth.instance.currentUser!.email;
+    final userDoc = _firestore.collection('Users').doc(currentUserUid);
+    final usernameSnapshot = await userDoc.get();
+    return usernameSnapshot.data()!['username'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Track Order',
           style: TextStyle(color: white),
+        ),
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.message))],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10))),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PaymentDetails(
+                  orderID: widget.orderId,
+                ),
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.payment,
+            color: white,
+          ),
+          label: Text(
+            'Proceed with payment',
+            style: TextStyle(color: white),
+          ),
         ),
       ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -84,162 +130,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 // Item details
                 const Divider(),
                 const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      const Row(
-                        children: [
-                          SizedBox(width: 20),
-                          Text(
-                            'Details',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8.0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ListTile(
-                          visualDensity:
-                              const VisualDensity(horizontal: 0, vertical: -4),
-                          title: const Text(
-                            'Charge Fees: ',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          trailing: Text(
-                            'RM ${orderData['offeredChargeFees'].toString()}',
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ListTile(
-                          visualDensity:
-                              const VisualDensity(horizontal: 0, vertical: -4),
-                          title: const Text(
-                            'Location: ',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          trailing: Text(
-                            orderData['location'],
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10.0),
-                      const Row(
-                        children: [
-                          SizedBox(width: 20),
-                          Text(
-                            "Food Items",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: orderData['fooditem'].length,
-                            itemBuilder: (context, index) {
-                              final item = orderData['fooditem'][index];
-
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: ListTile(
-                                  title: Row(
-                                    children: [
-                                      Text(item['name'],
-                                          style: const TextStyle(fontSize: 15)),
-                                      const SizedBox(width: 30),
-                                      Text(
-                                        ' x ${item['quantity'].toString()} ',
-                                        style: const TextStyle(fontSize: 15),
-                                      ),
-                                    ],
-                                  ),
-
-                                  trailing: Text(
-                                    'RM ${item['price']}',
-                                    style: const TextStyle(fontSize: 15),
-                                  ), // Adjust currency formatting
-                                ),
-                              );
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: ListTile(
-                              visualDensity: const VisualDensity(
-                                  horizontal: 0, vertical: -4),
-                              title: const Text(
-                                'Total Item Price : ',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                              trailing: Text(
-                                // Calculate the total price directly
-                                'RM ${(orderData['totalPrice'] as num)}',
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: ListTile(
-                              visualDensity: const VisualDensity(
-                                  horizontal: 0, vertical: -4),
-                              title: const Text(
-                                'Total Items Price + Fees : ',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                              trailing: Text(
-                                // Calculate the total price directly
-                                'RM ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}',
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 40),
-                          // Chosen rider and total price
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Chosen rider and total price
-                Column(
-                  children: [
-                    Text('Chosen Rider: ${orderData['chosenRiderId']}'),
-                    const SizedBox(height: 8.0),
-                    Text(
-                        'Total Price: ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}'),
-                  ],
-                ),
-
-                // Middle section with timeline
-
                 // Bottom section with chat button
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton.icon(
-                    onPressed: () => _startChat(chosenRiderId),
-                    icon: const Icon(Icons.chat),
-                    label: const Text('Chat with Rider'),
-                  ),
-                ),
               ],
             ),
           );

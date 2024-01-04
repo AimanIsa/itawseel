@@ -4,13 +4,14 @@ import 'package:itawseel/pages/Main/splash.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'firebase_options.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is ready
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(MyApp()); // Run your app
 }
 
 class MyApp extends StatelessWidget {
@@ -22,14 +23,15 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: const Color.fromARGB(255, 128, 10, 1),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-          useMaterial3: true,
-          fontFamily: 'Poppins',
-          appBarTheme: AppBarTheme(
-            backgroundColor: primaryColor,
-            iconTheme: IconThemeData(color: white),
-          )),
+        primaryColor: primaryColor,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        useMaterial3: true,
+        fontFamily: 'Poppins',
+        appBarTheme: AppBarTheme(
+          backgroundColor: primaryColor,
+          iconTheme: IconThemeData(color: white),
+        ),
+      ),
       home: const Splash(),
     );
   }

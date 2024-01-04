@@ -18,6 +18,7 @@ class RunnerSignUpPage extends StatefulWidget {
 class _RunnerSignUpPageState extends State<RunnerSignUpPage> {
   final TextEditingController matricNumberController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
+  String? selectedGender; // Initially unselected
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -57,7 +58,7 @@ class _RunnerSignUpPageState extends State<RunnerSignUpPage> {
             .update({
           'isRunner': true,
           'matricNumber': matricNumberController.text,
-          'gender': genderController.text,
+          'gender': selectedGender,
           'riderId': riderId,
           'QrCode': "", // Add rider ID creation
         });
@@ -77,18 +78,36 @@ class _RunnerSignUpPageState extends State<RunnerSignUpPage> {
       backgroundColor: const Color.fromARGB(255, 248, 248, 248),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(50.0),
-          child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(40.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Sign Up as a Runner",
-                  style: TextStyle(
-                    fontSize: 35,
-                    color: primaryColor,
-                    fontWeight: FontWeight.w800,
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Sign Up",
+                      style: TextStyle(
+                        fontSize: 35,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      " as a Runner.",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: primaryColor,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 50),
                 MyTextfields(
@@ -96,11 +115,44 @@ class _RunnerSignUpPageState extends State<RunnerSignUpPage> {
                   obscureText: false,
                   controller: matricNumberController,
                 ),
-                const SizedBox(height: 10),
-                MyTextfields(
-                  hintText: "Gender",
-                  obscureText: false,
-                  controller: genderController,
+                const SizedBox(height: 30),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        const Text(
+                          "Select Your Gender",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Radio<String>(
+                              value: 'Brother',
+                              groupValue: selectedGender,
+                              onChanged: (value) =>
+                                  setState(() => selectedGender = value),
+                            ),
+                            const Text('Brother'),
+                          ],
+                        ),
+
+                        Row(
+                          children: [
+                            Radio<String>(
+                              value: 'Sister',
+                              groupValue: selectedGender,
+                              onChanged: (value) =>
+                                  setState(() => selectedGender = value),
+                            ),
+                            const Text('Sister    '),
+                          ],
+                        ),
+                        // Add more options as needed, ensuring inclusivity
+                      ],
+                    )
+                  ],
                 ),
                 const SizedBox(height: 40),
                 MyButton(

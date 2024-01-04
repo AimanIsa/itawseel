@@ -20,58 +20,6 @@ class _OrderDetailsState extends State<OrderDetails> {
   final TextEditingController _locationController = TextEditingController();
   bool existlocation = false;
 
-  Future<void> _showLocationDialog() async {
-    return showDialog<void>(
-      context: context,
-      builder: (context) => Theme(
-        data: Theme.of(context).copyWith(
-          dialogTheme: DialogTheme(
-            backgroundColor: const Color.fromARGB(
-                255, 255, 255, 255), // Adjust background color
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15), // Customize shape
-            ),
-          ),
-        ),
-        child: AlertDialog(
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                const SizedBox(height: 15),
-                const Text("Enter your specific Location"),
-                const SizedBox(height: 15),
-                TextField(
-                  controller: _locationController,
-                  decoration: const InputDecoration(
-                    hintText: 'eg: Block D, Uthman',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _selectedLocation = _locationController.text;
-                });
-                Navigator.pop(context);
-              },
-              child: const Text('Set Location'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Future<void> _updateOrderLocation() async {
     try {
       await FirebaseFirestore.instance
@@ -202,7 +150,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                             const SizedBox(height: 20),
                             Text(
-                              'Total : RM ${orderData['totalPrice']}',
+                              'Total : RM ${orderData['totalPrice'].toStringAsFixed(2)}',
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -221,37 +169,27 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: primaryColor,
-                                    ),
-                                    child: Text(
-                                      "update",
-                                      style: TextStyle(color: white),
-                                    ),
-                                    onPressed: () {
-                                      if (_selectedLocation == 'yourlocation') {
-                                        _showLocationDialog();
-                                      } else {
-                                        setState(() {
-                                          _selectedLocation =
-                                              _locationController.text;
-                                          _updateOrderLocation();
-                                        });
-                                      }
-                                    }),
-                              ],
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  _selectedLocation = _locationController.text;
+                                });
+                              },
+                              child: Text("Update",
+                                  style: TextStyle(
+                                    color: primaryColor,
+                                  )),
                             ),
+                            SizedBox(width: 20),
                             const SizedBox(height: 20),
                             Visibility(
                               visible: _selectedLocation == 'Location' ||
                                   _selectedLocation.isEmpty,
-                              child: const Text(
-                                  "To continue, Please enter you location"),
+                              child: Text(
+                                "To continue, Please enter you location",
+                                style: TextStyle(
+                                    color: primaryColor, fontSize: 12),
+                              ),
                             ),
                           ],
                         ),
@@ -261,15 +199,15 @@ class _OrderDetailsState extends State<OrderDetails> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 70),
                       child: Visibility(
-                        visible: _selectedLocation != 'Location',
+                        visible: _selectedLocation != '' &&
+                            _locationController.text.isNotEmpty,
                         child: MyButton(
                             text: "Choose Runner",
                             onTap: () {
                               setState(() {
                                 _updateOrderLocation();
                               });
-                              if (_selectedLocation != 'Location' ||
-                                  _selectedLocation.isEmpty) {
+                              if (_selectedLocation != 'Location') {
                                 // Location is selected, proceed to the next page
                                 Navigator.push(
                                     context,
@@ -279,7 +217,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             )));
                               } else {
                                 // Location is not selected, show the dialog
-                                _showLocationDialog();
+                                // _showLocationDialog();
                               }
                             }),
                       ),

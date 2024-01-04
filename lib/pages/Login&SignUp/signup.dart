@@ -60,7 +60,6 @@ class _SignUpPageState extends State<SignUpPage> {
           'password': passwordController.text,
           'phonenumber': phoneController.text,
           'imageUrl': "default",
-          'location': "currentLocation",
           'isRunner': false,
         });
 
