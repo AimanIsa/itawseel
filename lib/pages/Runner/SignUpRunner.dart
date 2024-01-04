@@ -38,8 +38,9 @@ class _RunnerSignUpPageState extends State<RunnerSignUpPage> {
           .get();
       if (doc.exists && doc.get('isRunner') == true) {
         // User is already a runner, redirect to runner homepage
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => NavigationR()));
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const NavigationR()));
       }
     }
   }
@@ -57,11 +58,14 @@ class _RunnerSignUpPageState extends State<RunnerSignUpPage> {
           'isRunner': true,
           'matricNumber': matricNumberController.text,
           'gender': genderController.text,
-          'riderId': riderId, // Add rider ID creation
+          'riderId': riderId,
+          'QrCode': "", // Add rider ID creation
         });
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => NavigationR()));
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const NavigationR()));
       } catch (error) {
+        // ignore: use_build_context_synchronously
         displayMessageToUser('Error registering as a runner: $error', context);
       }
     }

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/pages/Customer/detailsorder.dart';
 import 'package:itawseel/themes/colors.dart';
@@ -18,7 +17,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   final List<CartItem> _cartItems = [];
-  final String _selectedLocation = 'Location';
+  final String _selectedLocation = 'yourlocation';
 
   @override
   void initState() {
@@ -37,7 +36,6 @@ class _CartPageState extends State<CartPage> {
       await FirebaseFirestore.instance.collection('orders').doc().get();
       // Generate a unique order ID
       final orderId = FirebaseFirestore.instance.collection('orders').doc().id;
-      final user = FirebaseAuth.instance.currentUser!;
 
 // Create order data
       final orderData = {
@@ -68,11 +66,6 @@ class _CartPageState extends State<CartPage> {
           .doc(orderId)
           .set(orderData);
 
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user.email) // Access the specific order document
-          .update({'location': _selectedLocation});
-
       // Clear cart (optional)
       widget.cartItems.clear();
       // Navigate to selectrider.dart
@@ -97,8 +90,9 @@ class _CartPageState extends State<CartPage> {
       // Handle errors gracefully
       // ignore: avoid_print
       print('Error saving order: $error');
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Failed to place order. Please try again.'),
         ),
       );
@@ -116,7 +110,7 @@ class _CartPageState extends State<CartPage> {
           'Cart',
           style: TextStyle(color: Colors.white),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: primaryColor,
       ),
       body: Padding(
@@ -130,7 +124,7 @@ class _CartPageState extends State<CartPage> {
                 child: Card(
                   child: Column(
                     children: [
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       ListTile(
                         leading: Image.asset(
                           cartItem.image,
@@ -145,12 +139,12 @@ class _CartPageState extends State<CartPage> {
                         subtitle: Text(
                             'Qty: ${cartItem.quantity} | Price: RM ${cartItem.itemPrice} | Total: RM ${cartItem.getTotalPrice()}'),
                         trailing: IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           color: primaryColor,
                           onPressed: () => removeCartItem(index),
                         ),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                     ],
                   ),
                 ),
@@ -167,9 +161,9 @@ class _CartPageState extends State<CartPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                SizedBox(width: 30),
+                const SizedBox(width: 30),
                 Text(
-                  'Total: \RM ${getTotalPrice()}',
+                  'Total: RM ${getTotalPrice()}',
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

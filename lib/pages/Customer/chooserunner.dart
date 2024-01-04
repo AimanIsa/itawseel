@@ -71,7 +71,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                                   .doc(widget.orderId)
                                   .update({
                                 'Runnerusername': riderUsername,
-                                'offerStatus': 'riderSelected',
+                                'offerStatus': 'riderselected',
                                 'chosenRiderId': riderId,
                                 'offeredChargeFees': offeredPrice,
                                 // Add other chosen rider details if needed
@@ -88,23 +88,34 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                       } else if (index == 0) {
                         return Visibility(
                             visible: index != 0 || riderId.isNotEmpty,
-                            child: Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(height: 10),
-                                  Text(
-                                    'Waiting for runner...',
-                                    style: TextStyle(color: white),
-                                  ),
-                                  SizedBox(height: 20),
-                                  CircularProgressIndicator(
-                                    color: white,
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        'Waiting for runner...',
+                                        style: TextStyle(color: white),
+                                      ),
+                                      const Spacer(),
+                                      CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                white),
+                                        color: white,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ));
                       }
+                      return null;
                     },
                   );
                 } else {
@@ -152,7 +163,7 @@ class _RunnerCardState extends State<RunnerCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ElevatedButton(

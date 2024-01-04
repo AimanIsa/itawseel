@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itawseel/Components/navigationR.dart';
 import 'package:itawseel/themes/colors.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class TrackOrderRunnerPage extends StatefulWidget {
   final String orderId;
@@ -29,10 +32,52 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Track Order',
           style: TextStyle(color: white),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.message),
+              color: const Color.fromARGB(255, 255, 255, 255))
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+            onPressed: () {
+              QuickAlert.show(
+                onCancelBtnTap: () {
+                  Navigator.pop(context);
+                },
+                onConfirmBtnTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NavigationR()));
+                },
+                context: context,
+                type: QuickAlertType.confirm,
+                text: 'to go back to homepage?, (your order will be lost)',
+                titleAlignment: TextAlign.center,
+                textAlignment: TextAlign.center,
+                confirmBtnText: 'Yes',
+                cancelBtnText: 'No',
+                confirmBtnColor: Colors.white,
+                backgroundColor: white,
+                headerBackgroundColor: Colors.grey,
+                confirmBtnTextStyle: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                barrierColor: const Color.fromARGB(106, 255, 255, 255),
+                titleColor: Colors.black,
+                textColor: Colors.black,
+              );
+            },
+            child: const Text("Go back to hompage")),
       ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: _orderStream,
@@ -50,138 +95,57 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
           return SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Chosen rider and total price
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Rider: ${orderData!['Runnerusername']}',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            ' Charge Fees: ${orderData['offeredChargeFees']}',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            ' Location: ${orderData['location']}',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            'Total Price: ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}',
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      const Row(
-                        children: [
-                          SizedBox(width: 10),
-                          Text(
-                            "Food Items",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: primaryColor),
-                        child: Column(
-                          children: [
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: orderData['fooditem'].length,
-                              itemBuilder: (context, index) {
-                                final item = orderData['fooditem'][index];
-                                final count = 0 + 1;
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    color: primaryColor,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ListTile(
-                                        leading: Text(
-                                          '$count',
-                                          style: TextStyle(
-                                              color: white, fontSize: 15),
-                                        ),
-                                        title: Text(
-                                          item['name'],
-                                          style: TextStyle(
-                                              color: white, fontSize: 15),
-                                        ),
-                                        trailing: Text(
-                                          'RM ${item['price']}',
-                                          style: TextStyle(
-                                              color: white, fontSize: 15),
-                                        ), // Adjust currency formatting
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
 
                 // Middle section with timeline and buttons
                 Column(
                   children: [
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     const Row(
                       children: [
-                        SizedBox(width: 20),
+                        SizedBox(width: 30),
                         Text(
                           "Tracking Progress",
                           style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const SizedBox(width: 30),
+                        Text(
+                          "( Click on the icon button below to update )",
+                          style: TextStyle(color: primaryColor, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: primaryColor),
-                          child: _buildTimeline(offerStatus)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: primaryColor),
+                            child: _buildTimeline(offerStatus)),
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+
+                const SizedBox(height: 20),
+
                 // Bottom section with buttons for updating status
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor),
@@ -197,16 +161,153 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor),
-                      onPressed: () => _updateOfferStatus('completed'),
+                      onPressed: () {
+                        _updateOfferStatus('arrived');
+                      },
                       child: Icon(Icons.check_circle_outline_rounded,
                           color: white),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                   ],
                 ),
-                SizedBox(
-                  height: 100,
-                )
+                const SizedBox(height: 20),
+                // Text("Click on this button to update order status"),
+                const Divider(),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      const Row(
+                        children: [
+                          SizedBox(width: 20),
+                          Text(
+                            'Details',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ListTile(
+                          visualDensity:
+                              const VisualDensity(horizontal: 0, vertical: -4),
+                          title: const Text(
+                            'Charge Fees: ',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          trailing: Text(
+                            'RM ${orderData!['offeredChargeFees'].toString()}',
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ListTile(
+                          visualDensity:
+                              const VisualDensity(horizontal: 0, vertical: -4),
+                          title: const Text(
+                            'Location: ',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          trailing: Text(
+                            orderData['location'],
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10.0),
+                      const Row(
+                        children: [
+                          SizedBox(width: 20),
+                          Text(
+                            "Food Items",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: orderData['fooditem'].length,
+                            itemBuilder: (context, index) {
+                              final item = orderData['fooditem'][index];
+
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: ListTile(
+                                  title: Row(
+                                    children: [
+                                      Text(item['name'],
+                                          style: const TextStyle(fontSize: 15)),
+                                      const SizedBox(width: 30),
+                                      Text(
+                                        ' x ${item['quantity'].toString()} ',
+                                        style: const TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+
+                                  trailing: Text(
+                                    'RM ${item['price']}',
+                                    style: const TextStyle(fontSize: 15),
+                                  ), // Adjust currency formatting
+                                ),
+                              );
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ListTile(
+                              visualDensity: const VisualDensity(
+                                  horizontal: 0, vertical: -4),
+                              title: const Text(
+                                'Total Item Price : ',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              trailing: Text(
+                                // Calculate the total price directly
+                                'RM ${(orderData['totalPrice'] as num)}',
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ListTile(
+                              visualDensity: const VisualDensity(
+                                  horizontal: 0, vertical: -4),
+                              title: const Text(
+                                'Total Items Price + Fees : ',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              trailing: Text(
+                                // Calculate the total price directly
+                                'RM ${(orderData['totalPrice'] as num) + orderData['offeredChargeFees']}',
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          // Chosen rider and total price
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           );
@@ -218,119 +319,97 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
   Widget _buildTimeline(String offerStatus) {
     return Column(
       children: [
+        const SizedBox(height: 20),
         // Unordered list for a visual timeline
         ListView(
           shrinkWrap: true, // Use a dot as the timeline marker
           children: [
             // Rider selected
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                color: primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: offerStatus == 'riderselected'
-                      ? ListTile(
-                          leading: Icon(Icons.person_pin, color: white),
-                          title: Text('Rider Selected',
-                              style: TextStyle(color: white)),
-                          trailing:
-                              const Icon(Icons.circle, color: Colors.green))
-                      : const ListTile(
-                          leading: Icon(
-                            Icons.person_pin,
-                            color: Colors.white54,
-                          ),
-                          title: Text('Rider Selected',
-                              style: TextStyle(color: Colors.white54)),
-                          trailing: const SizedBox(),
-                        ),
-                ),
-              ),
-            ),
 
             // Buying food
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                color: primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: offerStatus == 'buyingFood'
-                      ? ListTile(
-                          leading: Icon(Icons.fastfood, color: white),
-                          title: Text('Buying Food',
-                              style: TextStyle(color: white)),
-                          trailing:
-                              const Icon(Icons.circle, color: Colors.green))
-                      : const ListTile(
-                          leading: Icon(
-                            Icons.fastfood,
-                            color: Colors.white54,
-                          ),
-                          title: Text('Buying Food',
-                              style: TextStyle(color: Colors.white54)),
-                          trailing: const SizedBox(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: offerStatus == 'buyingFood'
+                    ? Card(
+                        color: white,
+                        child: ListTile(
+                            leading: Icon(Icons.fastfood, color: primaryColor),
+                            title: Text('Buying Food',
+                                style: TextStyle(color: primaryColor)),
+                            trailing:
+                                const Icon(Icons.circle, color: Colors.green)),
+                      )
+                    : const ListTile(
+                        leading: Icon(
+                          Icons.fastfood,
+                          color: Colors.white54,
                         ),
-                ),
+                        title: Text('Buying Food',
+                            style: TextStyle(color: Colors.white54)),
+                        trailing: SizedBox(),
+                      ),
               ),
             ),
 
             // On the way
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                color: primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: offerStatus == 'onTheWay'
-                      ? ListTile(
-                          leading: Icon(Icons.delivery_dining, color: white),
-                          title: Text('On The Way',
-                              style: TextStyle(color: white)),
-                          trailing:
-                              const Icon(Icons.circle, color: Colors.green))
-                      : const ListTile(
-                          leading: Icon(
-                            Icons.delivery_dining_outlined,
-                            color: Colors.white54,
-                          ),
-                          title: Text('On The Way',
-                              style: TextStyle(color: Colors.white54)),
-                          trailing: const SizedBox(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: offerStatus == 'onTheWay'
+                    ? Card(
+                        color: white,
+                        child: ListTile(
+                            leading: Icon(Icons.delivery_dining,
+                                color: primaryColor),
+                            title: Text('On The Way',
+                                style: TextStyle(color: primaryColor)),
+                            trailing:
+                                const Icon(Icons.circle, color: Colors.green)),
+                      )
+                    : const ListTile(
+                        leading: Icon(
+                          Icons.delivery_dining_outlined,
+                          color: Colors.white54,
                         ),
-                ),
+                        title: Text('On The Way',
+                            style: TextStyle(color: Colors.white54)),
+                        trailing: SizedBox(),
+                      ),
               ),
             ),
 
             // Completed
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                color: primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: offerStatus == 'completed'
-                      ? ListTile(
-                          leading: Icon(Icons.check, color: white),
-                          title:
-                              Text('Completed', style: TextStyle(color: white)),
-                          trailing:
-                              const Icon(Icons.circle, color: Colors.green))
-                      : const ListTile(
-                          leading: Icon(
-                            Icons.check,
-                            color: Colors.white54,
-                          ),
-                          title: Text('Completed',
-                              style: TextStyle(color: Colors.white54)),
-                          trailing: const SizedBox(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: offerStatus == 'arrived'
+                    ? Card(
+                        color: white,
+                        child: ListTile(
+                            leading: Icon(Icons.check, color: primaryColor),
+                            title: Text('Arrived',
+                                style: TextStyle(color: primaryColor)),
+                            trailing:
+                                const Icon(Icons.circle, color: Colors.green)),
+                      )
+                    : const ListTile(
+                        leading: Icon(
+                          Icons.check,
+                          color: Colors.white54,
                         ),
-                ),
+                        title: Text('Arrived',
+                            style: TextStyle(color: Colors.white54)),
+                        trailing: SizedBox(),
+                      ),
               ),
             ),
           ],
         ),
+        const SizedBox(height: 20),
       ],
     );
   }

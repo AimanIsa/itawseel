@@ -74,12 +74,12 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  Text('Waiting for customer to choose a runner...'),
-                  SizedBox(height: 20),
-                  CircularProgressIndicator(),
+                  const Text('Waiting for customer to choose a runner...'),
+                  const SizedBox(height: 20),
+                  const CircularProgressIndicator(),
                 ],
               );
-            } else if (offerStatus == 'riderSelected') {
+            } else if (offerStatus == 'riderselected') {
               // Check if this user is the chosen rider
               // Fetch the chosen riderId from Firestore
               FirebaseFirestore.instance
@@ -103,7 +103,7 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                     QuickAlert.show(
                       context: context,
                       type: QuickAlertType.success,
-                      text: 'Congrats, The customer choose you',
+                      text: 'Congrats, The customer chose you',
                       showConfirmBtn: true,
                     );
                   });
@@ -112,7 +112,7 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NavigationR(),
+                      builder: (context) => const NavigationR(),
                     ),
                   );
                   QuickAlert.show(

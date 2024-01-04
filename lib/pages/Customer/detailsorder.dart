@@ -234,17 +234,22 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       style: TextStyle(color: white),
                                     ),
                                     onPressed: () {
-                                      setState(() {
-                                        _selectedLocation =
-                                            _locationController.text;
-                                        _updateOrderLocation();
-                                      });
+                                      if (_selectedLocation == 'yourlocation') {
+                                        _showLocationDialog();
+                                      } else {
+                                        setState(() {
+                                          _selectedLocation =
+                                              _locationController.text;
+                                          _updateOrderLocation();
+                                        });
+                                      }
                                     }),
                               ],
                             ),
                             const SizedBox(height: 20),
                             Visibility(
-                              visible: _selectedLocation == 'Location',
+                              visible: _selectedLocation == 'Location' ||
+                                  _selectedLocation.isEmpty,
                               child: const Text(
                                   "To continue, Please enter you location"),
                             ),
@@ -258,7 +263,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       child: Visibility(
                         visible: _selectedLocation != 'Location',
                         child: MyButton(
-                            text: "Continue",
+                            text: "Choose Runner",
                             onTap: () {
                               setState(() {
                                 _updateOrderLocation();

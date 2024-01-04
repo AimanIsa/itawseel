@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Components/navigation.dart';
+import 'package:itawseel/pages/Main/splash.dart';
 import 'package:itawseel/pages/Runner/SignUpRunner.dart';
 import 'package:itawseel/themes/colors.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class ChooseCategory extends StatefulWidget {
   const ChooseCategory({super.key});
@@ -20,6 +24,42 @@ class _ChooseCategoryState extends State<ChooseCategory> {
           title: const Text("IIUM Food Delivery",
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  QuickAlert.show(
+                    onCancelBtnTap: () {
+                      Navigator.pop(context);
+                    },
+                    onConfirmBtnTap: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => Splash()),
+                      );
+                    },
+                    context: context,
+                    type: QuickAlertType.confirm,
+                    text: 'Do you want to logout?',
+                    titleAlignment: TextAlign.center,
+                    textAlignment: TextAlign.center,
+                    confirmBtnText: 'Yes',
+                    cancelBtnText: 'No',
+                    confirmBtnColor: Colors.white,
+                    backgroundColor: white,
+                    headerBackgroundColor: Colors.grey,
+                    confirmBtnTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    barrierColor: primaryColor,
+                    titleColor: Colors.black,
+                    textColor: Colors.black,
+                  );
+                },
+                icon: const Icon(Icons.logout),
+                color: const Color.fromARGB(255, 255, 255, 255))
+          ],
         ),
         backgroundColor: Colors.grey.shade100,
         body: SafeArea(
