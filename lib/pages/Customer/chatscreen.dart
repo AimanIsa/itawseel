@@ -20,6 +20,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   late String currentUserId;
 
   late TextEditingController _messageController;
@@ -34,6 +35,13 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     currentUserId = _auth.currentUser!.email!;
     _messageController = TextEditingController();
+
+    // Create the chat collection document if it doesn't exist
+    _firestore.collection('chats').doc(widget.chatId).set({
+      'lastMessage': '',
+      'lastMessageSender': '',
+      'lastMessageTimestamp': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 
   @override
@@ -128,6 +136,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     'sender': currentUserId,
                     'text': _messageController.text,
                     'timestamp': FieldValue.serverTimestamp(),
+                  });
+
+                  // Update the last message details in the chat document
+                  await _firestore
+                      .collection('chats')
+                      .doc(widget.chatId)
+                      .update({
+                    'lastMessage': _messageController.text,
+                    'lastMessageSender': currentUserId,
+                    'lastMessageTimestamp': FieldValue.serverTimestamp(),
                   });
                   _messageController.clear();
                 }
