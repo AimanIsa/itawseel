@@ -1,7 +1,7 @@
 // ignore: file_names
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:itawseel/Components/mydrawer.dart';
+import 'package:itawseel/Components/mydrawerR.dart';
 import 'package:itawseel/pages/Main/choosehome.dart';
 import 'package:itawseel/pages/Runner/HomepageR.dart';
 import 'package:itawseel/pages/Runner/chatR.dart';
@@ -68,7 +68,7 @@ class _NavigationState extends State<NavigationR> {
         ],
         toolbarHeight: 70,
       ),
-      drawer: const MyDrawer(),
+      drawer: const MyDrawerR(),
       body: _pages[_selectedIndex],
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(10.0),
