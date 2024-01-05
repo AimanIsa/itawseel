@@ -90,70 +90,73 @@ class _ProfileRState extends State<ProfileR> {
                                           : NetworkImage(userDoc['imageUrl']),
                                 ),
                                 const SizedBox(width: 18),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      userDoc['username'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.white),
-                                    ),
-                                    SingleChildScrollView(
-                                      child: Text(
-                                        userDoc['email'],
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 20),
+                                      Text(
+                                        userDoc['username'],
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.white),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: Text(
+                                          userDoc['email'],
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      Text(
+                                        userDoc['gender'],
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                             color: Colors.white),
                                       ),
-                                    ),
-                                    Text(
-                                      userDoc['gender'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: Colors.white),
-                                    ),
-                                    Text(
-                                      userDoc['phonenumber'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: Colors.white),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        const Text(
-                                            "                                "),
-                                        TextButton(
-                                            onPressed: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const EditProfilePage())),
-                                            child: const Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  "Edit",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                Icon(
-                                                  Icons.edit,
-                                                  color: Colors.white,
-                                                ),
-                                              ],
-                                            )),
-                                      ],
-                                    )
-                                  ],
+                                      Text(
+                                        userDoc['phonenumber'],
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: Colors.white),
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          const Text(
+                                              "                                "),
+                                          TextButton(
+                                              onPressed: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const EditProfilePage())),
+                                              child: const Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    "Edit",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  Icon(
+                                                    Icons.edit,
+                                                    color: Colors.white,
+                                                  ),
+                                                ],
+                                              )),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),

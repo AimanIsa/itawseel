@@ -50,131 +50,134 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: primaryColor,
         body: SingleChildScrollView(
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 100),
-                Image.asset(
-                  "lib/Images/ItawseelW.png",
-                  width: 200,
-                  height: 70,
-                ),
-                Text(
-                  'IIUM Food Delivery',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(35.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          // Text login
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Login",
-                                style: TextStyle(
-                                    fontSize: 35,
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.w800),
-                              ),
-                            ],
-                          ),
-
-                          // Text Login to your account to continue
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Login to your Itawseel account",
-                                style: TextStyle(
-                                    fontSize: 13, color: primaryColor),
-                              ),
-                            ],
-                          ),
-
-                          // TextField Email
-                          const SizedBox(height: 30),
-                          MyTextfields(
-                              hintText: "Email",
-                              obscureText: false,
-                              controller: emailController),
-
-                          // Textfield password
-                          const SizedBox(height: 10),
-
-                          TextFormField(
-                            controller: passwordController,
-                            obscureText: _isPasswordVisible,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              contentPadding: const EdgeInsets.all(18),
-                              suffixIcon: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _isPasswordVisible = !_isPasswordVisible;
-                                  });
-                                },
-                                child: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
+            child: Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 100),
+                  Image.asset(
+                    "lib/Images/ItawseelW.png",
+                    width: 200,
+                    height: 70,
+                  ),
+                  Text(
+                    'IIUM Food Delivery',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.all(35.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Text login
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      fontSize: 35,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.w800),
                                 ),
-                              ),
-                              labelText: 'Password',
+                              ],
                             ),
-                          ),
 
-                          // Text Forgot Password
-                          const SizedBox(height: 5),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text("Forgot Password ?"),
-                            ],
-                          ),
-                          // Button Login
-                          const SizedBox(height: 40),
-                          MyButton(
-                            text: "Login",
-                            onTap: login,
-                          ),
-
-                          // Text Don’t have an account ? SignUp
-                          const SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                "Don’t have an account ?",
-                                style: TextStyle(fontSize: 12),
-                              ),
-                              GestureDetector(
-                                onTap: widget.onTap,
-                                child: const Text(
-                                  " Register here",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                            // Text Login to your account to continue
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Login to your Itawseel account",
+                                  style: TextStyle(
+                                      fontSize: 13, color: primaryColor),
                                 ),
+                              ],
+                            ),
+
+                            // TextField Email
+                            const SizedBox(height: 30),
+                            MyTextfields(
+                                hintText: "Email",
+                                obscureText: false,
+                                controller: emailController),
+
+                            // Textfield password
+                            const SizedBox(height: 10),
+
+                            TextFormField(
+                              controller: passwordController,
+                              obscureText: _isPasswordVisible,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                contentPadding: const EdgeInsets.all(18),
+                                suffixIcon: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _isPasswordVisible = !_isPasswordVisible;
+                                    });
+                                  },
+                                  child: Icon(
+                                    _isPasswordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ),
+                                labelText: 'Password',
                               ),
-                            ],
-                          ),
-                        ],
+                            ),
+
+                            // Text Forgot Password
+                            const SizedBox(height: 5),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text("Forgot Password ?"),
+                              ],
+                            ),
+                            // Button Login
+                            const SizedBox(height: 40),
+                            MyButton(
+                              text: "Login",
+                              onTap: login,
+                            ),
+
+                            // Text Don’t have an account ? SignUp
+                            const SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Don’t have an account ?",
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                GestureDetector(
+                                  onTap: widget.onTap,
+                                  child: const Text(
+                                    " Register here",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ));
