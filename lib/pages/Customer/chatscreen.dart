@@ -22,7 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   late String currentUserId;
-
+  late DocumentReference _chatDocRef;
   late TextEditingController _messageController;
   Future<String> getRecipientUsername() async {
     final doc =
@@ -35,13 +35,31 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     currentUserId = _auth.currentUser!.email!;
     _messageController = TextEditingController();
+    _chatDocRef = _firestore.collection('chats').doc(widget.chatId);
+    _firestore
+        .collection('chats')
+        .doc(widget.chatId)
+        .set({
+          'latestMessage': {}, // Initialize with an empty map
+          'receiver': widget.recipientId,
+        }, SetOptions(merge: true)) // Merge with existing data
+        .then((value) => print('Latest message and receiver initialized'))
+        .catchError((error) => print('Error initializing: $error'));
+    // Initialize latest message and receiver in the chat document
+    initializeLatestMessage();
+  }
 
-    // Create the chat collection document if it doesn't exist
-    _firestore.collection('chats').doc(widget.chatId).set({
-      'lastMessage': '',
-      'lastMessageSender': '',
-      'lastMessageTimestamp': FieldValue.serverTimestamp(),
+  void initializeLatestMessage() async {
+    await _firestore.collection('chats').doc(widget.chatId).set({
+      'latestMessage': '',
+      'receiver': widget.recipientId,
     }, SetOptions(merge: true));
+  }
+
+  Future<void> updateLatestMessage(String messageText) async {
+    await _chatDocRef.update({
+      'latestMessage': messageText,
+    });
   }
 
   @override
@@ -137,17 +155,22 @@ class _ChatScreenState extends State<ChatScreen> {
                     'text': _messageController.text,
                     'timestamp': FieldValue.serverTimestamp(),
                   });
+                  await updateLatestMessage(_messageController.text);
+                  _messageController.clear();
 
-                  // Update the last message details in the chat document
+                  // Update latest message only if it's from the other user
                   await _firestore
                       .collection('chats')
                       .doc(widget.chatId)
                       .update({
-                    'lastMessage': _messageController.text,
-                    'lastMessageSender': currentUserId,
-                    'lastMessageTimestamp': FieldValue.serverTimestamp(),
+                    'latestMessage': {
+                      'sender': currentUserId == widget.recipientId
+                          ? currentUserId
+                          : widget.recipientId,
+                      'text': _messageController.text,
+                      'timestamp': FieldValue.serverTimestamp(),
+                    }
                   });
-                  _messageController.clear();
                 }
               },
               icon: const Icon(Icons.send),
