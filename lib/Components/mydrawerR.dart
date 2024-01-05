@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Components/navigationR.dart';
 import 'package:itawseel/pages/Runner/chatR.dart';
+import 'package:itawseel/pages/Runner/historyR.dart';
 import 'package:itawseel/pages/Runner/profileR.dart';
 import 'package:itawseel/themes/colors.dart';
 
@@ -45,12 +46,17 @@ class _MyDrawerRState extends State<MyDrawerR> {
               ),
 
               //  History side menu
-              const ListTile(
+              ListTile(
                 leading: Icon(Icons.history_edu),
                 title: Text(
                   'History',
                   style: TextStyle(fontSize: 17),
                 ),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HistoryR()));
+                },
+                hoverColor: const Color.fromARGB(255, 128, 10, 1),
               ),
               // message side menu
               ListTile(

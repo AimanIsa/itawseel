@@ -100,26 +100,30 @@ class _ChatScreenState extends State<ChatScreen> {
                   final messageText = message['text'];
                   final messageSender = message['sender'];
 
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: messageSender == currentUserId
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                      children: [
-                        if (messageSender != currentUserId)
-                          const SizedBox(width: 10),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: messageSender == currentUserId
-                                ? Colors.blue[100]
-                                : Colors.grey[200],
-                            borderRadius: BorderRadius.circular(10),
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: messageSender == currentUserId
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        children: [
+                          if (messageSender != currentUserId)
+                            const SizedBox(width: 10),
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: messageSender == currentUserId
+                                    ? Colors.blue[100]
+                                    : Color.fromARGB(255, 98, 241, 186),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(messageText),
+                            ),
                           ),
-                          child: Text(messageText),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -130,52 +134,64 @@ class _ChatScreenState extends State<ChatScreen> {
           },
         ),
       ),
-      bottomSheet: Container(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                style: const TextStyle(color: Colors.black87),
-                controller: _messageController,
-                decoration: const InputDecoration(
-                  hintText: 'Type a message',
+      bottomSheet: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(13),
+            border: Border.all(
+              color: primaryColor,
+            ),
+          ),
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  style: const TextStyle(color: Colors.black87),
+                  controller: _messageController,
+                  decoration: const InputDecoration(
+                    hintText: 'Type a message',
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-              onPressed: () async {
-                if (_messageController.text.isNotEmpty) {
-                  await _firestore
-                      .collection('chats')
-                      .doc(widget.chatId)
-                      .collection('messages')
-                      .add({
-                    'sender': currentUserId,
-                    'text': _messageController.text,
-                    'timestamp': FieldValue.serverTimestamp(),
-                  });
-                  await updateLatestMessage(_messageController.text);
-                  _messageController.clear();
-
-                  // Update latest message only if it's from the other user
-                  await _firestore
-                      .collection('chats')
-                      .doc(widget.chatId)
-                      .update({
-                    'latestMessage': {
-                      'sender': currentUserId == widget.recipientId
-                          ? currentUserId
-                          : widget.recipientId,
+              IconButton(
+                onPressed: () async {
+                  if (_messageController.text.isNotEmpty) {
+                    await _firestore
+                        .collection('chats')
+                        .doc(widget.chatId)
+                        .collection('messages')
+                        .add({
+                      'sender': currentUserId,
                       'text': _messageController.text,
                       'timestamp': FieldValue.serverTimestamp(),
-                    }
-                  });
-                }
-              },
-              icon: const Icon(Icons.send),
-            ),
-          ],
+                    });
+                    await updateLatestMessage(_messageController.text);
+                    _messageController.clear();
+
+                    // Update latest message only if it's from the other user
+                    await _firestore
+                        .collection('chats')
+                        .doc(widget.chatId)
+                        .update({
+                      'latestMessage': {
+                        'sender': currentUserId == widget.recipientId
+                            ? currentUserId
+                            : widget.recipientId,
+                        'text': _messageController.text,
+                        'timestamp': FieldValue.serverTimestamp(),
+                      }
+                    });
+                  }
+                },
+                icon: Icon(
+                  Icons.send,
+                  color: primaryColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
