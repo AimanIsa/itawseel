@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:itawseel/pages/Customer/alert.dart';
 import 'package:itawseel/pages/Main/splash.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'firebase_options.dart';

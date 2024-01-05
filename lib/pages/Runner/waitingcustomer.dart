@@ -115,10 +115,12 @@ class _WaitingForCustomerPageState extends State<WaitingForCustomerPage> {
                       builder: (context) => const NavigationR(),
                     ),
                   );
+
                   QuickAlert.show(
                     context: context,
+                    title: 'Sorry',
                     type: QuickAlertType.error,
-                    text: 'Sorry, the order is already taken',
+                    text: 'the order is already taken',
                     showConfirmBtn: true,
                   );
 
