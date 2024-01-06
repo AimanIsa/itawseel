@@ -59,35 +59,7 @@ class _HomepageState extends State<Homepage> {
                             child: Text("So, what's on your menu for today?"),
                           ),
                           const SizedBox(height: 20),
-                          // Container(
-                          //   decoration: BoxDecoration(color: primaryColor),
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.symmetric(
-                          //         horizontal: 0.0, vertical: 5.0),
-                          //     child: Padding(
-                          //       padding: const EdgeInsets.symmetric(
-                          //           horizontal: 35.0, vertical: 7.0),
-                          //       child: TextField(
-                          //         decoration: InputDecoration(
-                          //           filled: true,
-                          //           fillColor: Colors.white,
-                          //           enabledBorder: OutlineInputBorder(
-                          //             borderSide:
-                          //                 const BorderSide(color: Colors.black),
-                          //             borderRadius: BorderRadius.circular(10),
-                          //           ),
-                          //           focusedBorder: OutlineInputBorder(
-                          //             borderSide:
-                          //                 const BorderSide(color: Colors.black),
-                          //             borderRadius: BorderRadius.circular(10),
-                          //           ),
-                          //           hintText: 'Favourite',
-                          //           hintStyle: TextStyle(color: primaryColor),
-                          //         ),
-                          //         style: TextStyle(color: primaryColor),
-                          //       ),
-                          //     ),
-                          //   ),
+
                           // ),
 
                           const SizedBox(height: 10),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:itawseel/Components/mybutton.dart';
 import 'package:itawseel/Components/mytextfields.dart';
 import 'package:itawseel/Helper/helper_function.dart';
+import 'package:itawseel/pages/Admin/adminlogin.dart';
 import 'package:itawseel/themes/colors.dart';
 
 class LoginPage extends StatefulWidget {
@@ -139,12 +140,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             // Text Forgot Password
                             const SizedBox(height: 5),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text("Forgot Password ?"),
-                              ],
-                            ),
+
                             // Button Login
                             const SizedBox(height: 40),
                             MyButton(
@@ -176,6 +172,17 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminLoginPage()));
+                      },
+                      child: Text(
+                        "Login As Admin",
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      )),
                 ],
               ),
             ),

@@ -52,7 +52,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
-                    barrierColor: primaryColor,
+                    barrierColor: Color.fromARGB(181, 0, 0, 0),
                     titleColor: Colors.black,
                     textColor: Colors.black,
                   );

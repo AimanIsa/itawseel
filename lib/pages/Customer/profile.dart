@@ -70,14 +70,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                           fontSize: 20,
                                           color: Colors.white),
                                     ),
-                                    SingleChildScrollView(
-                                      child: Text(
-                                        userDoc['email'],
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                            color: Colors.white),
-                                      ),
+                                    Text(
+                                      userDoc['email'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.white),
                                     ),
                                     Text(
                                       userDoc['phonenumber'],
@@ -87,11 +85,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                           color: Colors.white),
                                     ),
                                     Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        const Text(
-                                            "                                "),
+                                        const Text(""),
                                         TextButton(
                                             onPressed: () => Navigator.push(
                                                 context,
