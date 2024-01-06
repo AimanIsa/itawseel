@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(color: white),
         ),
       ),
-      home: const AdminDashboard(),
+      home: const Splash(),
     );
   }
 }
