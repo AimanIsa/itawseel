@@ -59,6 +59,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                       final offeredPrice = offer['offeredChargeFees'] as num;
                       final imageUrl = offer['imageUrl'] as String;
                       final gender = offer!['gender'] as String;
+                      final rating = offer['rating'] as num;
 
                       // Assuming offered price is a number
                       if (index != 0) {
@@ -77,6 +78,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                                 'offerStatus': 'riderselected',
                                 'chosenRiderId': riderId,
                                 'offeredChargeFees': offeredPrice,
+                                'rating': rating,
                                 // Add other chosen rider details if needed
                               });
 
@@ -88,6 +90,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                           },
                           orderid: widget.orderId,
                           gender: gender,
+                          ratingrunner: rating,
                         );
                       } else if (index == 0) {
                         return Visibility(
@@ -137,7 +140,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
   }
 }
 
-_chooserunner(String riderId, num offeredPrice) async {}
+_chooserunner(String riderId, num offeredPrice, num ratingrunner) async {}
 
 class RunnerCard extends StatefulWidget {
   final String riderId;
@@ -146,6 +149,7 @@ class RunnerCard extends StatefulWidget {
   final String profileImage;
   final String orderid;
   final String gender;
+  final num ratingrunner;
 
   // Add other runner details...
 
@@ -160,6 +164,7 @@ class RunnerCard extends StatefulWidget {
     required this.profileImage,
     required this.gender,
     required this.orderid,
+    required this.ratingrunner,
   }) : super(key: key);
 
   @override
@@ -176,7 +181,8 @@ class _RunnerCardState extends State<RunnerCard> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(228, 6, 176, 255),
+                      backgroundColor: Color.fromARGB(227, 255, 255, 255),
+                      side: BorderSide(color: Colors.blue, width: 8),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadiusDirectional.circular(12))),
                   onPressed: () {
@@ -210,6 +216,61 @@ class _RunnerCardState extends State<RunnerCard> {
                               'Brother',
                               style: TextStyle(color: primaryColor),
                             ),
+                            if (widget.ratingrunner == 5)
+                              Row(
+                                children: [
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                ],
+                              ),
+                            if (widget.ratingrunner == 4)
+                              Row(
+                                children: [
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                ],
+                              ),
+                            if (widget.ratingrunner == 3)
+                              Row(
+                                children: [
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                ],
+                              ),
+                            if (widget.ratingrunner == 2)
+                              Row(
+                                children: [
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                ],
+                              ),
+                            if (widget.ratingrunner == 1)
+                              Row(
+                                children: [
+                                  Icon(Icons.star,
+                                      size: 16, color: primaryColor),
+                                ],
+                              ),
                           ],
                         ),
                         const Spacer(),

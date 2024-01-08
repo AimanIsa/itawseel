@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Components/navigation.dart';
+import 'package:itawseel/pages/Customer/RateRunner.dart';
 import 'package:itawseel/themes/colors.dart';
 
 class PaymentDetails extends StatefulWidget {
@@ -29,6 +30,26 @@ class _PaymentDetailsState extends State<PaymentDetails> {
   final CollectionReference _ordersCollection =
       FirebaseFirestore.instance.collection('orders');
 
+  Future<String?> getChosenRiderId(String orderId) async {
+    try {
+      final orderDoc = await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .get();
+
+      if (orderDoc.exists) {
+        final data = orderDoc.data();
+        return data?['chosenRiderId'] as String?;
+      } else {
+        return null; // Order document not found
+      }
+    } catch (error) {
+      // Handle potential errors, such as network issues or invalid orderId
+      print('Error retrieving chosenRiderId: $error');
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +72,34 @@ class _PaymentDetailsState extends State<PaymentDetails> {
               style: TextStyle(color: white),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10))),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RatingRunner(
+                  orderID: widget.orderID,
+                  choosenRunnerId: getChosenRiderId(widget.orderID),
+                ),
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.star,
+            color: white,
+          ),
+          label: Text(
+            'Rate Runner',
+            style: TextStyle(color: white),
+          ),
         ),
       ),
       body: Center(
@@ -179,6 +228,22 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                             ),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ListTile(
+                            visualDensity: const VisualDensity(
+                                horizontal: 0, vertical: -4),
+                            title: const Text(
+                              'Runner Name: ',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            trailing: Text(
+                              orderData['Runnerusername'],
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 10.0),
                         const Row(
                           children: [
@@ -267,6 +332,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                               ),
                             ),
                             const SizedBox(height: 20),
+
                             // Chosen rider and total price
                           ],
                         ),
@@ -276,7 +342,6 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
           ],
         ),
       ),

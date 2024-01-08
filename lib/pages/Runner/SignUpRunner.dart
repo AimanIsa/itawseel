@@ -60,7 +60,9 @@ class _RunnerSignUpPageState extends State<RunnerSignUpPage> {
           'matricNumber': matricNumberController.text,
           'gender': selectedGender,
           'riderId': riderId,
-          'QrCode': "", // Add rider ID creation
+          'QrCode': "",
+          'ratingrunner': 5,
+          // Add rider ID creation
         });
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context,

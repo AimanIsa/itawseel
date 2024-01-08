@@ -61,6 +61,7 @@ class _SignUpPageState extends State<SignUpPage> {
           'phonenumber': phoneController.text,
           'imageUrl': "default",
           'isRunner': false,
+          'ratingrunner': 5,
         });
 
         Navigator.pop(context);

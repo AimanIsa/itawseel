@@ -179,8 +179,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 onSaved: (value) => _editedPhoneNumber = value,
                               ),
                               const SizedBox(height: 20),
-                              const Text("New Location: "),
-                              const SizedBox(height: 10),
                             ],
                           ),
                         ),

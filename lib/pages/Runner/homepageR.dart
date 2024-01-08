@@ -65,6 +65,13 @@ class _HomepageRState extends State<HomepageR> {
     return imageSnapshot.data()!['gender'];
   }
 
+  Future<num?> getratingrunner() async {
+    final currentUserUid = FirebaseAuth.instance.currentUser!.email;
+    final userDoc = _firestore.collection('Users').doc(currentUserUid);
+    final imageSnapshot = await userDoc.get();
+    return imageSnapshot.data()!['ratingrunner'];
+  }
+
   void _offerChargeFees(String orderId, double newChargeFees) async {
     print('orderId: $orderId');
     print('orderId: $newChargeFees');
@@ -75,6 +82,7 @@ class _HomepageRState extends State<HomepageR> {
       final imageUrl = await getimageurl();
       final gender = await getgender();
       final riderId = await getRiderId();
+      final rating = await getratingrunner();
       if (riderId != null) {
         // Proceed with offer submission only if riderId is available
         await FirebaseFirestore.instance
@@ -87,6 +95,7 @@ class _HomepageRState extends State<HomepageR> {
               'username': username,
               'imageUrl': imageUrl,
               'gender': gender,
+              'rating': rating,
               'offeredChargeFees': newChargeFees,
               //'timestamp': FieldValue.serverTimestamp(),
             }

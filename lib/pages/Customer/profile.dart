@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:itawseel/Components/mybutton.dart';
 import 'package:itawseel/pages/Customer/chatscreen.dart';
 import 'package:itawseel/pages/Customer/edit_profile.dart';
+import 'package:itawseel/pages/Main/splash.dart';
 import 'package:itawseel/themes/colors.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -51,13 +52,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         // Text("PROFILE",
                         //     style: TextStyle(
                         //         fontSize: 20,
                         //         fontWeight: FontWeight.bold,
                         //         color: primaryColor)),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Card(
                           color: primaryColor,
                           child: Padding(
@@ -134,41 +135,47 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
-                        Divider(),
-                        SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final emailadmin = 'admin123@gmail.com',
-                                adminemail =
-                                    await getAdminDocumentId(emailadmin);
-                            if (adminemail != null) {
-                              _startChat(
-                                  adminemail); // Pass the retrieved email to startChat
-                            } else {
-                              // Handle the case where email is not found
-                              print('Error: Rider email not found.');
-                              // Consider displaying an error message to the user
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Icon(Icons.person_pin),
-                              Text('Chat Admin'),
-                            ],
+                        const Divider(),
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 90),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              final emailadmin = 'admin123@gmail.com',
+                                  adminemail =
+                                      await getAdminDocumentId(emailadmin);
+                              if (adminemail != null) {
+                                _startChat(
+                                    adminemail); // Pass the retrieved email to startChat
+                              } else {
+                                // Handle the case where email is not found
+                                print('Error: Rider email not found.');
+                                // Consider displaying an error message to the user
+                              }
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.person_pin),
+                                Text('Chat Admin'),
+                              ],
+                            ),
                           ),
                         ),
 
-                        SizedBox(height: 180),
+                        const SizedBox(height: 180),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 70),
                           child: MyButton(
                               text: "Logout",
                               onTap: () {
                                 FirebaseAuth.instance.signOut();
-                                Navigator.popUntil(
-                                    context, ModalRoute.withName("/"));
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Splash()),
+                                );
                               }),
                         )
                       ],

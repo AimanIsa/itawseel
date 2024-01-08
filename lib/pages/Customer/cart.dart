@@ -61,6 +61,7 @@ class _CartPageState extends State<CartPage> {
             'imageUrl': 'default',
             'gender': '',
             'offeredChargeFees': 1,
+            'rating': 0
           }
         ])
       };
