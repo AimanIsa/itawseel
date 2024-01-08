@@ -85,9 +85,9 @@ class _PaymentDetailsState extends State<PaymentDetails> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RatingRunner(
-                  orderID: widget.orderID,
+                builder: (context) => RunnerRatingPage(
                   choosenRunnerId: getChosenRiderId(widget.orderID),
+                  orderId: widget.orderID,
                 ),
               ),
             );

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:itawseel/pages/Runner/trackorder.dart';
+import 'package:itawseel/pages/Runner/waitingcustomer.dart';
 import 'package:itawseel/themes/colors.dart';
 
 class HistoryR extends StatelessWidget {
@@ -77,13 +78,6 @@ class OrderCard extends StatelessWidget {
                 'Order ID: $orderId',
                 style: TextStyle(fontSize: 16),
               ),
-              // Extract and display other relevant details from order document
-              // For example:
-
-              // Text(
-              //   'Total: RM ${order['totalAmount'].toStringAsFixed(2)}',
-              //   style: TextStyle(fontSize: 14),
-              // ),
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -99,11 +93,24 @@ class OrderCard extends StatelessWidget {
                   ),
                 ],
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (offerstatus == 'completed') SizedBox(),
+                  if (offerstatus == 'pending')
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WaitingForCustomerPage(
+                              orderId: orderId,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text('Waiting...'),
+                    ),
                   if (offerstatus == 'riderselected' ||
                       offerstatus == 'buyingFood' ||
                       offerstatus == 'onTheWay' ||
