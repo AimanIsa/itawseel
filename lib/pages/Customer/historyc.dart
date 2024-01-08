@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/pages/Customer/chooserunner.dart';
-import 'package:itawseel/pages/Customer/detailsorder.dart';
 import 'package:itawseel/pages/Customer/payment.dart';
 import 'package:itawseel/pages/Customer/trackingorder.dart';
 import 'package:itawseel/themes/colors.dart';
@@ -37,13 +36,16 @@ class HistoryC extends StatelessWidget {
               return Center(child: Text('No orders found'));
             }
 
-            return ListView.builder(
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index];
-                return OrderCard(
-                    orderId: order.id, offerstatus: order['offerStatus']);
-              },
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                itemCount: orders.length,
+                itemBuilder: (context, index) {
+                  final order = orders[index];
+                  return OrderCard(
+                      orderId: order.id, offerstatus: order['offerStatus']);
+                },
+              ),
             );
           }
 
@@ -69,7 +71,8 @@ class OrderCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Card(
-        shadowColor: primaryColor,
+        elevation: 12,
+        shadowColor: const Color.fromARGB(103, 0, 0, 0),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -79,13 +82,6 @@ class OrderCard extends StatelessWidget {
                 'Order ID: $orderId',
                 style: TextStyle(fontSize: 16),
               ),
-              // Extract and display other relevant details from order document
-              // For example:
-
-              // Text(
-              //   'Total: RM ${order['totalAmount'].toStringAsFixed(2)}',
-              //   style: TextStyle(fontSize: 14),
-              // ),
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -101,7 +97,6 @@ class OrderCard extends StatelessWidget {
                   ),
                 ],
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -125,6 +120,8 @@ class OrderCard extends StatelessWidget {
                       offerstatus == 'onTheWay' ||
                       offerstatus == 'arrived')
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor),
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
@@ -135,7 +132,10 @@ class OrderCard extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text('Track Order'),
+                      child: Text(
+                        'Track Order',
+                        style: TextStyle(color: white),
+                      ),
                     ),
                   SizedBox(width: 10),
                   if (offerstatus == 'arrived')

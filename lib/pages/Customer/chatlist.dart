@@ -44,40 +44,54 @@ class _ChatPageState extends State<ChatPage> {
                       if (userId != currentUserId) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Card(
-                            elevation: 1,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: ListTile(
-                                title: Text(
-                                  user['username'],
-                                  style: TextStyle(
-                                    color: primaryColor,
+                          child: Column(
+                            children: [
+                              Card(
+                                elevation: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      radius: 25.0,
+                                      backgroundColor: Colors.grey,
+                                      backgroundImage:
+                                          user['imageUrl'] != 'default' &&
+                                                  user['imageUrl'].isNotEmpty
+                                              ? NetworkImage(user['imageUrl'])
+                                              : NetworkImage(user['imageUrl']),
+                                    ),
+                                    title: Text(
+                                      user['username'],
+                                      style: TextStyle(
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    subtitle: Text(user['email']),
+                                    onTap: () async {
+                                      chatId = getChatId(currentUserId, userId);
+                                      recipientId = userId;
+                                      await _firestore
+                                          .collection('chats')
+                                          .doc(chatId)
+                                          .set({
+                                        'users': [currentUserId, userId]
+                                      });
+                                      // ignore: use_build_context_synchronously
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ChatScreen(
+                                            chatId: chatId,
+                                            recipientId: recipientId,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
-                                onTap: () async {
-                                  chatId = getChatId(currentUserId, userId);
-                                  recipientId = userId;
-                                  await _firestore
-                                      .collection('chats')
-                                      .doc(chatId)
-                                      .set({
-                                    'users': [currentUserId, userId]
-                                  });
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChatScreen(
-                                        chatId: chatId,
-                                        recipientId: recipientId,
-                                      ),
-                                    ),
-                                  );
-                                },
                               ),
-                            ),
+                              SizedBox(height: 7),
+                            ],
                           ),
                         );
                       } else {

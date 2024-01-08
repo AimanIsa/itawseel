@@ -115,14 +115,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
+                                                Icon(
+                                                  Icons.edit,
+                                                  color: Colors.white,
+                                                ),
                                                 Text(
                                                   "Edit",
                                                   style: TextStyle(
                                                       color: Colors.white),
-                                                ),
-                                                Icon(
-                                                  Icons.edit,
-                                                  color: Colors.white,
                                                 ),
                                               ],
                                             )),
@@ -136,6 +136,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         SizedBox(height: 20),
 
+                        Divider(),
+                        SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () async {
                             final emailadmin = 'admin123@gmail.com',
@@ -150,10 +152,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               // Consider displaying an error message to the user
                             }
                           },
-                          child: Text('Chat Admin'),
+                          child: Row(
+                            children: [
+                              Icon(Icons.person_pin),
+                              Text('Chat Admin'),
+                            ],
+                          ),
                         ),
-                        Divider(),
-                        SizedBox(height: 200),
+
+                        SizedBox(height: 180),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 70),
                           child: MyButton(

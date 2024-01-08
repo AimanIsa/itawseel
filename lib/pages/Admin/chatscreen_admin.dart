@@ -65,24 +65,24 @@ class _ChatScreenAdminPageState extends State<ChatScreenAdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   toolbarHeight: 90,
-      //   title: FutureBuilder<String>(
-      //     future: getRecipientUsername(),
-      //     builder: (context, snapshot) {
-      //       if (snapshot.hasData) {
-      //         return Text(
-      //           snapshot.data!,
-      //           style: TextStyle(color: white),
-      //         );
-      //       } else if (snapshot.hasError) {
-      //         return const Text('Error loading username');
-      //       }
-      //       return const Text('Loading...');
-      //     },
-      //   ),
-      // ),
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        toolbarHeight: 90,
+        title: FutureBuilder<String>(
+          future: getRecipientUsername(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(
+                snapshot.data!,
+                style: TextStyle(color: white),
+              );
+            } else if (snapshot.hasError) {
+              return const Text('Error loading username');
+            }
+            return const Text('Loading...');
+          },
+        ),
+      ),
       body: Card(
         child: StreamBuilder<QuerySnapshot>(
           stream: _firestore
