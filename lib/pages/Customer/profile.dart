@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Components/mybutton.dart';
+import 'package:itawseel/pages/Customer/chatscreen.dart';
 import 'package:itawseel/pages/Customer/edit_profile.dart';
 import 'package:itawseel/themes/colors.dart';
 
@@ -12,8 +13,24 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+Future<String> getAdminDocumentId(String documentId) async {
+  try {
+    final doc = await FirebaseFirestore.instance
+        .collection('admin')
+        .doc('admin123@gmail.com')
+        .get();
+    final documentId = doc.id;
+    print(documentId);
+    return documentId;
+  } on Exception catch (e) {
+    print('Error fetching document ID: $e');
+    return 'Document not found'; // Or handle the error differently
+  }
+}
+
 class _ProfilePageState extends State<ProfilePage> {
   final user = FirebaseAuth.instance.currentUser!;
+  final _firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,6 +135,23 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         SizedBox(height: 20),
+
+                        ElevatedButton(
+                          onPressed: () async {
+                            final emailadmin = 'admin123@gmail.com',
+                                adminemail =
+                                    await getAdminDocumentId(emailadmin);
+                            if (adminemail != null) {
+                              _startChat(
+                                  adminemail); // Pass the retrieved email to startChat
+                            } else {
+                              // Handle the case where email is not found
+                              print('Error: Rider email not found.');
+                              // Consider displaying an error message to the user
+                            }
+                          },
+                          child: Text('Chat Admin'),
+                        ),
                         Divider(),
                         SizedBox(height: 200),
                         Padding(
@@ -143,5 +177,44 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       ),
     );
+  }
+
+  void _startChat(String adminemail) async {
+    final currentUserId = FirebaseAuth.instance.currentUser!.email!;
+
+    // Create chat ID using the same logic as the ChatListPage
+    final chatId = getChatId(currentUserId, adminemail);
+    print(currentUserId);
+    print(adminemail);
+    print(chatId);
+
+    // Check for existing chat document
+    final chatDoc = await _firestore.collection('chats').doc(chatId).get();
+
+    if (!chatDoc.exists) {
+      // Create a new chat document
+      await _firestore.collection('chats').doc(chatId).set({
+        'users': [currentUserId, adminemail]
+      });
+    }
+
+    // Navigate to ChatScreen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(
+          chatId: chatId,
+          recipientId: adminemail,
+        ),
+      ),
+    );
+  }
+
+  String getChatId(String user1, String user2) {
+    if (user1.compareTo(user2) < 0) {
+      return '$user1-$user2';
+    } else {
+      return '$user2-$user1';
+    }
   }
 }

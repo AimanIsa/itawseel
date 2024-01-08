@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itawseel/Helper/helper_function.dart';
+import 'package:itawseel/pages/Admin/chatlistAdmin.dart';
+import 'package:itawseel/pages/Customer/chatlist.dart';
 import 'package:itawseel/pages/Main/splash.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -273,7 +275,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ElevatedButton(
                   style:
                       ElevatedButton.styleFrom(backgroundColor: primaryColor),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ChatAdminPage()));
+                  },
                   child: Row(
                     children: [
                       Icon(
