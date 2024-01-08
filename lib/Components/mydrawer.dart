@@ -53,6 +53,10 @@ class _MyDrawerState extends State<MyDrawer> {
                   style: TextStyle(fontSize: 17),
                 ),
                 onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Navigation()));
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => HistoryC()));
                 },

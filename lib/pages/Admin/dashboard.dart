@@ -89,7 +89,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     FirebaseAuth.instance.signOut();
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => Splash()),
+                      MaterialPageRoute(builder: (context) => const Splash()),
                     );
                   },
                   context: context,
@@ -106,7 +106,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
-                  barrierColor: Color.fromARGB(181, 0, 0, 0),
+                  barrierColor: const Color.fromARGB(181, 0, 0, 0),
                   titleColor: Colors.black,
                   textColor: Colors.black,
                 );
@@ -114,7 +114,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               icon: const Icon(Icons.logout),
               color: const Color.fromARGB(255, 255, 255, 255))
         ],
-        title: Text(
+        title: const Text(
           "Dashboard",
           style: TextStyle(color: Colors.white),
         ),
@@ -123,7 +123,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -146,18 +146,18 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      Card(
+                      const Card(
                           child: Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10.0),
                         child: Icon(Icons.people),
                       )),
-                      Text('Total Users: '),
+                      const Text('Total Users: '),
                       const SizedBox(height: 6),
                       Row(
                         children: [
                           Text(
                             '$totalUsers',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -171,19 +171,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      Card(
+                      const Card(
                           child: Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10.0),
                         child: Icon(Icons.motorcycle),
                       )),
-                      Text('Total Runners: '),
+                      const Text('Total Runners: '),
                       const SizedBox(height: 6),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
                             '$totalRiders',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -205,10 +205,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Total Orders: '),
+                      const Text('Total Orders: '),
                       Text(
                         '$totalOrders',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -227,7 +227,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     style: TextStyle(color: Color.fromARGB(255, 116, 8, 0)),
                   ),
                 ),
-                SizedBox(width: 60)
+                const SizedBox(width: 60)
               ],
             ),
             const SizedBox(height: 70),
@@ -262,8 +262,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         Icons.dashboard,
                         color: white,
                       ),
-                      SizedBox(width: 5),
-                      Text(
+                      const SizedBox(width: 5),
+                      const Text(
                         "Dashboard",
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
@@ -280,8 +280,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         Icons.chat,
                         color: white,
                       ),
-                      SizedBox(width: 5),
-                      Text(
+                      const SizedBox(width: 5),
+                      const Text(
                         "Chat",
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
