@@ -6,8 +6,38 @@ import 'package:itawseel/pages/Runner/trackorder.dart';
 import 'package:itawseel/pages/Runner/waitingcustomer.dart';
 import 'package:itawseel/themes/colors.dart';
 
-class HistoryR extends StatelessWidget {
+class HistoryR extends StatefulWidget {
+  HistoryR({super.key});
+
+  @override
+  State<HistoryR> createState() => _HistoryRState();
+}
+
+class _HistoryRState extends State<HistoryR> {
   final user = FirebaseAuth.instance.currentUser!;
+  String? riderId; // Store the retrieved riderId
+  String? username;
+  @override
+  void initState() {
+    super.initState();
+    getRiderIdFromUsersCollection();
+  }
+
+  Future<void> getRiderIdFromUsersCollection() async {
+    try {
+      final userDocSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.email) // Assuming riderId is stored under the user's UID
+          .get();
+      riderId = userDocSnapshot.get('username');
+      print(riderId);
+      setState(() {}); // Update the UI to reflect the fetched riderId
+    } catch (error) {
+      print('Error fetching riderId from Users collection: $error');
+      // Handle the error appropriately, e.g., show an error message to the user
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +51,7 @@ class HistoryR extends StatelessWidget {
               'pending',
               'arrived'
             ])
-            .where('currentemail', isEqualTo: user.email)
+            .where('Runnerusername', isEqualTo: riderId)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -33,6 +63,7 @@ class HistoryR extends StatelessWidget {
             final orders = snapshot.data!.docs;
 
             if (orders.isEmpty) {
+              print(username);
               return Center(child: Text('No orders found'));
             }
 
@@ -40,6 +71,8 @@ class HistoryR extends StatelessWidget {
               itemCount: orders.length,
               itemBuilder: (context, index) {
                 final order = orders[index];
+                print(order.id);
+
                 return OrderCard(
                     orderId: order.id, offerstatus: order['offerStatus']);
               },

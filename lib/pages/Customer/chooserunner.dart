@@ -56,6 +56,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                       // Access riderId and offered price safely
                       final riderId = offer['riderId'] as String;
                       final riderUsername = offer['username'] as String;
+                      final rideremail = offer['riderEmail'] as String;
                       final offeredPrice = offer['offeredChargeFees'] as num;
                       final imageUrl = offer['imageUrl'] as String;
                       final gender = offer!['gender'] as String;
@@ -79,6 +80,7 @@ class _ChooseRunnerPageState extends State<ChooseRunnerPage> {
                                 'chosenRiderId': riderId,
                                 'offeredChargeFees': offeredPrice,
                                 'rating': rating,
+                                'riderEmail': rideremail,
                                 // Add other chosen rider details if needed
                               });
 
