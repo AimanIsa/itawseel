@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:itawseel/Components/navigationR.dart';
+import 'package:itawseel/pages/Customer/chatscreen.dart';
 import 'package:itawseel/themes/colors.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -18,6 +20,7 @@ class TrackOrderRunnerPage extends StatefulWidget {
 class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
   late Stream<DocumentSnapshot<Map<String, dynamic>>> _orderStream;
   String offerStatus = 'riderSelected'; // Initial status
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -26,6 +29,20 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
         .collection('orders')
         .doc(widget.orderId)
         .snapshots();
+  }
+
+  Future<String> getCurrentEmailByOrderId(String orderId) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .get();
+      final currentEmail = doc['currentemail'] as String;
+      return currentEmail;
+    } on Exception catch (e) {
+      print('Error fetching email: $e');
+      return 'Email not available'; // Or handle the error differently
+    }
   }
 
   @override
@@ -54,7 +71,18 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                final customerEmail =
+                    await getCurrentEmailByOrderId(widget.orderId);
+                if (customerEmail != null) {
+                  _startChat(
+                      customerEmail); // Pass the retrieved email to startChat
+                } else {
+                  // Handle the case where email is not found
+                  print('Error: Rider email not found.');
+                  // Consider displaying an error message to the user
+                }
+              },
               icon: const Icon(Icons.message),
               color: const Color.fromARGB(255, 255, 255, 255))
         ],
@@ -452,5 +480,44 @@ class _TrackOrderRunnerPageState extends State<TrackOrderRunnerPage> {
     setState(() {
       offerStatus = newStatus;
     });
+  }
+
+  void _startChat(String customerEmail) async {
+    final currentUserId = FirebaseAuth.instance.currentUser!.email!;
+
+    // Create chat ID using the same logic as the ChatListPage
+    final chatId = getChatId(currentUserId, customerEmail);
+    print(currentUserId);
+    print(customerEmail);
+    print(chatId);
+
+    // Check for existing chat document
+    final chatDoc = await _firestore.collection('chats').doc(chatId).get();
+
+    if (!chatDoc.exists) {
+      // Create a new chat document
+      await _firestore.collection('chats').doc(chatId).set({
+        'users': [currentUserId, customerEmail]
+      });
+    }
+
+    // Navigate to ChatScreen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(
+          chatId: chatId,
+          recipientId: customerEmail,
+        ),
+      ),
+    );
+  }
+
+  String getChatId(String user1, String user2) {
+    if (user1.compareTo(user2) < 0) {
+      return '$user1-$user2';
+    } else {
+      return '$user2-$user1';
+    }
   }
 }

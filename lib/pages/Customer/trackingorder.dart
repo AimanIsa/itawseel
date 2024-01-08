@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:itawseel/Components/navigation.dart';
+import 'package:itawseel/pages/Customer/chatscreen.dart';
 import 'package:itawseel/pages/Customer/homepagec.dart';
 import 'package:itawseel/pages/Customer/payment.dart';
 
@@ -43,6 +44,47 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
     return usernameSnapshot.data()!['username'];
   }
 
+  Future<String?> getEmailByRiderId(String riderId) async {
+    try {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('riderId', isEqualTo: riderId)
+          .limit(1) // Retrieve only one document, as riderId should be unique
+          .get();
+
+      if (userDoc.docs.isNotEmpty) {
+        final user = userDoc.docs.first.data();
+        return user['email'] as String?;
+      } else {
+        return null; // Rider ID not found
+      }
+    } catch (error) {
+      // Handle potential errors, such as network issues or invalid riderId
+      print('Error retrieving email by riderId: $error');
+      return null;
+    }
+  }
+
+  Future<String?> getChosenRiderId(String orderId) async {
+    try {
+      final orderDoc = await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .get();
+
+      if (orderDoc.exists) {
+        final data = orderDoc.data();
+        return data?['chosenRiderId'] as String?;
+      } else {
+        return null; // Order document not found
+      }
+    } catch (error) {
+      // Handle potential errors, such as network issues or invalid orderId
+      print('Error retrieving chosenRiderId: $error');
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +108,24 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
             ),
           ],
         ),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.message))],
+        actions: [
+          IconButton(
+              onPressed: () async {
+                final riderId = await getChosenRiderId(widget
+                    .orderId); // Assuming this function retrieves the rider ID
+
+                final rideremail = await getEmailByRiderId(riderId!);
+                if (rideremail != null) {
+                  _startChat(
+                      rideremail); // Pass the retrieved email to startChat
+                } else {
+                  // Handle the case where email is not found
+                  print('Error: Rider email not found.');
+                  // Consider displaying an error message to the user
+                }
+              },
+              icon: Icon(Icons.message))
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -278,8 +337,42 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
     );
   }
 
-  void _startChat(String riderId) {
-    // Initiate chat with the rider
-    // ... (Implement using your chat library's functionalities)
+  void _startChat(String rideremail) async {
+    final currentUserId = FirebaseAuth.instance.currentUser!.email!;
+
+    // Create chat ID using the same logic as the ChatListPage
+    final chatId = getChatId(currentUserId, rideremail);
+    print(currentUserId);
+    print(rideremail);
+    print(chatId);
+
+    // Check for existing chat document
+    final chatDoc = await _firestore.collection('chats').doc(chatId).get();
+
+    if (!chatDoc.exists) {
+      // Create a new chat document
+      await _firestore.collection('chats').doc(chatId).set({
+        'users': [currentUserId, rideremail]
+      });
+    }
+
+    // Navigate to ChatScreen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(
+          chatId: chatId,
+          recipientId: rideremail,
+        ),
+      ),
+    );
+  }
+
+  String getChatId(String user1, String user2) {
+    if (user1.compareTo(user2) < 0) {
+      return '$user1-$user2';
+    } else {
+      return '$user2-$user1';
+    }
   }
 }
