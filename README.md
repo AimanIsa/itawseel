@@ -22,7 +22,7 @@ The IIUM students often face challenges when it comes to food delivery services 
 
 1. Clone the github link 
 ```
-link
+https://github.com/AimanIsa/itawseel.git
 ```
 2. Open VS code, go the command pallete and enter git clone
 3. Paste the link
